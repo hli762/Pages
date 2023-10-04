@@ -2,33 +2,48 @@ import React from 'react';
 import {FcGoogle} from 'react-icons/fc';
 import Logo from '../images/logo.png';
 import { useEffect } from 'react';
-import jwt_decode from "jwt-decode";
 import request from '../lib/request';
+import { useNavigate } from 'react-router-dom';
+
 
 const Login = () => {
+
+
+    const navigate = useNavigate()
+
+    useEffect(()=>{
+        const storedUser = localStorage.getItem('user');
+        if(storedUser){
+            navigate('/')
+        }
+        else{
+               /* global google */
+            google.accounts.id.initialize({
+                client_id:"280146137420-cd3akf52jet1oh6i4ptivjeffosbmdr4.apps.googleusercontent.com",
+                callback: handleCallbackResponse
+            });
+
+            google.accounts.id.renderButton(
+                document.getElementById("signIn"),
+                {theme: "outline", size:"large"}
+            );
+        }
+
+    },[]);
 
     async function handleCallbackResponse(response){
         console.log("Encoded JWT ID token: " + response.credential);
         const JWT_token = response.credential;
-        const res = await request.post('/GoogleLogin', { code: JWT_token });
-        console.log(res.data);
-
+        try{
+            const res = await request.post('/GoogleLogin', { code: JWT_token });
+            const userData = res.data;
+            localStorage.setItem('user', JSON.stringify({userId:userData.id}));
+            navigate('/')
+        }catch(e){
+            console.log(e.message);
+        }
+        
     }
-
-    useEffect(()=>{
-        /* global google */
-        google.accounts.id.initialize({
-            client_id:"280146137420-cd3akf52jet1oh6i4ptivjeffosbmdr4.apps.googleusercontent.com",
-            callback: handleCallbackResponse
-        });
-
-        google.accounts.id.renderButton(
-            document.getElementById("signIn"),
-            {theme: "outline", size:"large"}
-            );
-
-    },[]);
-
     
 
     return (

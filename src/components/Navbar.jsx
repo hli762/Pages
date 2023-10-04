@@ -1,6 +1,7 @@
 import React from 'react';
 import {Button} from "./ui/button";
 import {Link} from "react-router-dom";
+import UserMenu from './UserMenu';
 
 const Navbar = () => {
     return (
@@ -21,6 +22,7 @@ const Navbar = () => {
                 Course-supervisor
             </Link>
 
+            <UserMenu />
             
         </div>
     );

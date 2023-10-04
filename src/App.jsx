@@ -1,20 +1,28 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import { Route, Routes } from 'react-router-dom';
 import AppRoutes from './AppRoutes';
-import { Toaster } from "./components/ui/toaster"
-
+import  { Toaster } from 'react-hot-toast';
 import  Layout  from './components/Layout';
 import Navbar from "./components/Navbar";
-import { useLocation } from 'react-router-dom';
+import { useLocation,useNavigate } from 'react-router-dom';
+import { getUserId } from './lib/getUserId';
 
 export default function App() {
     const location = useLocation();
-    console.log(location.pathname);
+    const navigate = useNavigate();
+  
+
+    useEffect(()=>{
+        if(!getUserId()){
+            navigate('/login')
+        }
+    
+    },[])
+    
     return (
         <Layout>
-            <Toaster />
             {location.pathname === '/login' ? <></> : <Navbar />}
-            
+            <Toaster />
             <Routes>
                 {AppRoutes.map((route, index) => {
                     const { element, requireAuth, ...rest } = route;
