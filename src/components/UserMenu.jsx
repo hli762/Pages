@@ -1,5 +1,5 @@
 import React from 'react'
-import { getUserId } from '../lib/getUserId';
+import { getUser } from '../lib/getUser';
 import useSwr from 'swr'
 import fetcher from '../lib/fetcher';
 
@@ -20,8 +20,12 @@ import {
 import { useNavigate } from 'react-router-dom';
 
 
+import {FaSignOutAlt} from 'react-icons/fa'
+
+import {AiFillEdit} from 'react-icons/ai'
+
 export default function UserMenu() {
-    const userId = getUserId()
+    const {userId} = getUser()
     const navigate = useNavigate()
     const {data:user} = useSwr(`/GetUserById/${userId}`,fetcher)
     console.log(user);
@@ -42,7 +46,14 @@ export default function UserMenu() {
             <DropdownMenuContent>
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={logout}>logout</DropdownMenuItem>
+                <DropdownMenuItem onClick={()=>navigate('/beMarker')} className='flex items-center gap-2'>
+                    <AiFillEdit/>
+                    Edit My Info
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={logout} className='flex items-center gap-2'>
+                    <FaSignOutAlt/>
+                    Logout
+                </DropdownMenuItem>
               
             </DropdownMenuContent>
         </DropdownMenu>

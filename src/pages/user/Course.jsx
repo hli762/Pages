@@ -13,7 +13,7 @@ import {
     CardHeader,
     CardTitle,
 } from "../../components/ui/card"
-import { getUserId } from '../../lib/getUserId';
+
 
 import generateRandomColor from "../../lib/generateRandomColor";
 
@@ -30,7 +30,7 @@ import useSwr from "swr";
 import fetcher from "../../lib/fetcher";
 import useCreateCourseModal from '../../hooks/useCreateCourseModal';
 import CreateCourseModal from '../../components/modals/CreateCourseModal';
-import { getUserType } from '../../lib/getUserType';
+import { getUser } from '../../lib/getUser';
 
 function Course(props) {
     const [showCard,setShowCard] = useState(true)
@@ -38,8 +38,7 @@ function Course(props) {
 
     const navigate = useNavigate();
     const createCourseModal = useCreateCourseModal()
-    const userType = getUserType()
-    console.log(userType);
+    const {userType} = getUser()
     
 
     return (
@@ -62,7 +61,7 @@ function Course(props) {
 
                
 
-                <Link   to={'/beMarker'}
+                <Link   to={'/application'}
                         className='flex justify-center underline cursor-pointer mt-6'>
                     Apply to be a marker
                 </Link>

@@ -21,18 +21,17 @@ import {
 import { Input } from '../../components/ui/input'
 import request from '../../lib/request'
 import useSwr from 'swr'
-import { getUserId } from '../../lib/getUserId'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-hot-toast'
 import fetcher from '../../lib/fetcher'
 import { Label } from "../../components/ui/label"
+import { getUser } from '../../lib/getUser'
 
 const Home = () => {
     
-    const userId = getUserId()
+    const {userId} = getUser()
     const navigate = useNavigate()
     const {data:user} = useSwr(`/GetUserById/${userId}`,fetcher)
-    console.log(user);
    
     useEffect(()=>{
         if(user?.cv){

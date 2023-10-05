@@ -5,15 +5,15 @@ import  { Toaster } from 'react-hot-toast';
 import  Layout  from './components/Layout';
 import Navbar from "./components/Navbar";
 import { useLocation,useNavigate } from 'react-router-dom';
-import { getUserId } from './lib/getUserId';
+import { getUser } from './lib/getUser';
 
 export default function App() {
     const location = useLocation();
     const navigate = useNavigate();
-  
+    const {userId} = getUser()
 
     useEffect(()=>{
-        if(!getUserId()){
+        if(!userId){
             navigate('/login')
         }
     
