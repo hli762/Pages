@@ -37,7 +37,13 @@ const Login = () => {
         try{
             const res = await request.post('/GoogleLogin', { code: JWT_token });
             const userData = res.data;
-            localStorage.setItem('user', JSON.stringify({userId:userData.id}));
+            console.log(res.data);
+            localStorage.setItem('user', JSON.stringify({
+                userId:userData.id,
+                userType:userData.type
+            }));
+          
+            // localStorage.setItem('userType', JSON.stringify({userId:userData.id}));
             navigate('/')
         }catch(e){
             console.log(e.message);

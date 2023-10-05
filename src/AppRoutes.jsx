@@ -12,7 +12,8 @@ import SupervisorApplication from './pages/supervisor/Application'
 const AppRoutes = [
   {
     index: true,
-    element: <Home />
+    // element: <Home />
+    element: <Course />
   },
 
   {
@@ -38,6 +39,10 @@ const AppRoutes = [
   {
     path: '/supervisor/application',
     element: <SupervisorApplication/>
+  },
+  {
+    path:'/beMarker',
+    element:<Home/>
   }
  
 ];

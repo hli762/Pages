@@ -3,7 +3,7 @@ import {Progress} from "../../components/ui/progress";
 import {Checkbox} from "../../components/ui/checkbox";
 
 import bg from '../../images/bg.jpg'
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import {
     Card,
@@ -13,6 +13,7 @@ import {
     CardHeader,
     CardTitle,
 } from "../../components/ui/card"
+import { getUserId } from '../../lib/getUserId';
 
 import generateRandomColor from "../../lib/generateRandomColor";
 
@@ -29,12 +30,17 @@ import useSwr from "swr";
 import fetcher from "../../lib/fetcher";
 import useCreateCourseModal from '../../hooks/useCreateCourseModal';
 import CreateCourseModal from '../../components/modals/CreateCourseModal';
+import { getUserType } from '../../lib/getUserType';
 
 function Course(props) {
     const [showCard,setShowCard] = useState(true)
     const {data:courses,isLoading} = useSwr('/GetAllCourses',fetcher)
+
     const navigate = useNavigate();
     const createCourseModal = useCreateCourseModal()
+    const userType = getUserType()
+    console.log(userType);
+    
 
     return (
         <div className='flex w-100 p-4'>
@@ -45,10 +51,21 @@ function Course(props) {
                     All Course
                 </div>
 
-                <div    onClick={()=>{createCourseModal.onOpen()}} 
+                {
+                     userType === "MarkerCoordinator"
+                      && 
+                     <div   onClick={()=>{createCourseModal.onOpen()}} 
                         className='flex justify-center underline cursor-pointer mt-6'>
-                    Add Course
-                </div>
+                            Add Course
+                     </div>
+                }
+
+               
+
+                <Link   to={'/beMarker'}
+                        className='flex justify-center underline cursor-pointer mt-6'>
+                    Apply to be a marker
+                </Link>
                 
             </div>
             

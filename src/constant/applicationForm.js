@@ -17,8 +17,10 @@ export const userFormSchama = z.object({
     message: 'Email must end with @aucklanduni.ac.nz',
   }),
 
-  auid: z.string().min(9,{
-    message:"AUID must be at least 9 characters"
+  auid: z.string().min(8,{
+    message:"AUID must be at least 8 characters"
+  }).max(10,{
+    message:"AUID must be no more than 10 characters"
   }),
 
   isOverseas:z.boolean().default(false).optional(),

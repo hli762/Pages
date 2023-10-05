@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect,useState } from 'react'
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import { useForm } from "react-hook-form"
@@ -25,15 +25,23 @@ import { getUserId } from '../../lib/getUserId'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-hot-toast'
 import fetcher from '../../lib/fetcher'
-
+import { Label } from "../../components/ui/label"
 
 const Home = () => {
     
     const userId = getUserId()
     const navigate = useNavigate()
     const {data:user} = useSwr(`/GetUserById/${userId}`,fetcher)
+    console.log(user);
    
+    useEffect(()=>{
+        if(user?.cv){
+            navigate('/course')
+        }
+    },[user])
 
+    const [cv, setCv] = useState(null);
+    const [record, setRecord] = useState(null);
 
     const form = useForm({
         resolver: zodResolver(userFormSchama),
@@ -53,16 +61,43 @@ const Home = () => {
       })
 
       const onSubmit = async (data) => {
-        try{
-            await request.post('/AddUser',{
-                userId:user.id,
-                ...data
-            })
-            toast.success("Uploaded sucessfully 🚀🚀🚀")
-
-        }catch(e){
-            toast.error("Something went wrong")
+        try {
+            const formData = new FormData();
+        
+            formData.append("userID", userId);
+            formData.append("name", data.name);
+            formData.append("upi", data.upi);
+            formData.append("email", data.email);
+            formData.append("auid", data.auid);
+            formData.append("isOverseas", data.isOverseas);
+            formData.append("isCitizenOrPermanent", data.isCitizenOrPermanent);
+            formData.append("enrolmentDetail", data.enrolmentDetail);
+            formData.append("underOrPost", data.underOrPost);
+            formData.append("haveOtherContracts", data.haveOtherContracts);
+        
+            
+            formData.append("cv", cv); // Assuming data.cv is a FileList
+            formData.append("academicRecord", record); // Assuming data.academicRecord is a FileList
+                
+        
+            await request.post("/AddUser",formData,  {
+                    headers: {
+                    'Content-Type': 'multipart/form-data',
+                    }
+                });
+        
+            toast.success("Uploaded successfully 🚀🚀🚀");
+        } catch (e) {
+          toast.error(e.message);
         }
+      };
+
+      const handleCvChange = (e) => {
+        setCv(e.target.files[0]);
+      };
+      const handleRecordChange = (e) => {
+        setRecord(e.target.files[0]);
+     
       };
 
     return (
@@ -238,8 +273,9 @@ const Home = () => {
                         render={({ field }) => (
                         <FormItem>
                             <FormLabel>Please upload your CV:</FormLabel>
+                            <Label htmlFor="cv" className=" text-neutral-500"> {cv?.name}</Label>
                             <FormControl>
-                                <Input type='file' {...field} />
+                                <Input id="cv" type="file" {...field}  onChange={(e)=>handleCvChange(e)}/>
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -251,14 +287,16 @@ const Home = () => {
                         name="academicRecord"
                         render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Please upload your academicRecord:</FormLabel>
+                            <FormLabel>Please upload your academic record:</FormLabel>
+                            <Label htmlFor="record" className=" text-neutral-500">{record?.name}</Label>
                             <FormControl>
-                                <Input type='file' {...field} />
+                                <Input id="record"  type="file" {...field}  onChange={(e)=>handleRecordChange(e)}/>
                             </FormControl>
                             <FormMessage />
                         </FormItem>
                         )}
                     />
+
                     <div className='flex justify-end'>
                         <Button type="submit">Next</Button>
                     </div>
