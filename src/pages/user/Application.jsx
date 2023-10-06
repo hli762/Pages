@@ -12,18 +12,17 @@ import {
     TableHeader,
     TableRow,
 } from "../../components/ui/table";
-
 import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
-  } from "../../components/ui/select";
+    Menubar,
+    MenubarContent,
+    MenubarItem,
+    MenubarMenu,
+    MenubarSeparator,
+    MenubarTrigger,
+  } from "../../components/ui/menubar";
 
 
+import Loading from '../../components/Loading';
 import useApplyModal from "../../hooks/useApplyModal";
 import ApplyModal from "../../components/modals/ApplyModal";
 import fetcher from '../../lib/fetcher';
@@ -42,9 +41,7 @@ function Application(props) {
         applyModal.onOpen()
     }
     if(isLoading){
-        return <div className='text-lg'>
-            Loading...
-        </div>
+        return <Loading/>
     }
     
     return (
@@ -80,23 +77,24 @@ function Application(props) {
                                 <TableCell >{course.courseName}</TableCell>
                                 <TableCell>{course.enrolledStudents}/{course.estimatedStudents}</TableCell>
                                 <TableCell>
-                                    <Select>
-                                        <SelectTrigger className="w-[180px]">
-                                            <SelectValue placeholder="view assignment" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectGroup>
-                                            <SelectLabel>Assgiment</SelectLabel>
-                                            {
-                                                course.assignments?.map((assignment,index)=>(
-                                                        <SelectItem key={assignment.id} value={assignment?.assignmentType}>
-                                                            {assignment?.assignmentType}
-                                                        </SelectItem>
-                                                ))
-                                            }
-                                            </SelectGroup>
-                                        </SelectContent>
-                                    </Select>
+                                    <Menubar className='flex justify-center'>
+                                        <MenubarMenu>
+                                            <MenubarTrigger>View Assignment</MenubarTrigger>
+                                            <MenubarContent>
+                                                {
+                                                    course.assignments?.map((assignment,index)=>(
+                                                        <div key={assignment.id} >
+                                                             <MenubarSeparator />
+                                                            <MenubarItem inset> {assignment?.assignmentType}</MenubarItem>
+                                                          
+                                                        </div>
+                                                           
+                                                    ))
+                                                }
+                                                
+                                            </MenubarContent>
+                                        </MenubarMenu>
+                                    </Menubar>
                                 </TableCell>
                                 <TableCell >
                                     <Button onClick={() => handleApply(course.id)}>

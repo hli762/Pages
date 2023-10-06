@@ -12,10 +12,15 @@ import {AiFillCheckCircle} from 'react-icons/ai'
 import {MdRadioButtonUnchecked} from 'react-icons/md'
 import useSwr from "swr";
 import fetcher from "../../lib/fetcher";
+import Loading from '../Loading';
 
 function Application(props) {
     const {data:applications,isLoading} = useSwr('/GetAllApplications',fetcher)
     console.log(applications)
+
+    if(isLoading){
+        return <Loading/>
+    }
   
     return (
         <div className='flex flex-col gap-3 p-4'>

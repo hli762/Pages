@@ -43,7 +43,6 @@ const Modal= ({isOpen,onClose,onSubmit,title,body,footer,actionLabel,disabled}) 
                         <div className='relative p-4 flex-auto'>
                             {body}
                         </div>
-                      
                     </div>
                 </div>
             </div>

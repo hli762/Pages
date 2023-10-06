@@ -28,6 +28,7 @@ import fetcher from "../../lib/fetcher";
 import useCreateCourseModal from '../../hooks/useCreateCourseModal';
 import CreateCourseModal from '../../components/modals/CreateCourseModal';
 import { getUser } from '../../lib/getUser';
+import Loading from '../../components/Loading';
 
 function Course(props) {
     const [showCard, setShowCard] = useState(true)
@@ -37,11 +38,14 @@ function Course(props) {
     const createCourseModal = useCreateCourseModal()
     const { userType } = getUser()
 
+    if (isLoading) {
+        return <Loading />
+    }
 
     return (
         <div className='flex w-100 p-4'>
             <CreateCourseModal />
-            <div className='basis-1/6 '>
+            <div className='basis-1/6 justify-center'>
                 {/* <div    onClick={()=>setShowCard(!showCard)}
                         className='flex justify-center underline cursor-pointer'>
                     All Course
@@ -51,15 +55,34 @@ function Course(props) {
                 {
                     userType === "MarkerCoordinator"
                     &&
-                    <Button onClick={() => { createCourseModal.onOpen() }}
-                        className='flex justify-center cursor-pointer mt-6'>
-                        Add Course
-                    </Button>
+                    <>
+                        <div
+                            className='flex block justify-center mt-6'
+                        >
+                            <Button onClick={() => { createCourseModal.onOpen() }}
+
+                            >
+                                Add Course
+                            </Button>
+                        </div>
+                        <div onClick={() => { navigate('/supervisor') }}
+                            className='flex justify-center mt-6'>
+                            <Button>View all applications</Button>
+                        </div>
+                    </>
                 }
 
-                <Link to={'/application'} className='inline-block mt-6'>
-                    <Button>Apply to be a marker</Button>
-                </Link>
+                {
+                    userType === "User"
+                    &&
+                    <Link to={'/application'}
+                        className='flex block justify-center cursor-pointer mt-6'>
+                        <Button>Apply to be a marker</Button>
+                    </Link>
+
+                }
+
+
 
             </div>
 
