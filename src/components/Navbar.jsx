@@ -14,9 +14,6 @@ const Navbar = () => {
             <Link to={'/application'} className={'text-white'}>
                 Application
             </Link>
-            <Link to={'/course'} className={'text-white'}>
-                Courses
-            </Link>
             {
                 userType === "MarkeCoordinator" 
                 &&

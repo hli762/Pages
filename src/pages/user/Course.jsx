@@ -73,23 +73,23 @@ function Course(props) {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:md:grid-cols-3 gap-4">
                         {
                             courses?.map((course, index) =>(
-                                <Card   onClick={()=>navigate(`${course.id}`)}
-                                        className={'cursor-pointer'} key={course?.id}>
-                                    <CardHeader className={'p-0'}>
+                                <Card   
+                                    onClick={()=>navigate(`${course.id}`)}
+                                    className={'cursor-pointer relative'} key={course?.id}
+                                >
+                                    <CardHeader className={'p-0 pt-6'}>
                                         <div
-                                                style={{ backgroundColor: generateRandomColor() }}
-                                                className={`h-[200px]`}>
-                                            
+                                            style={{ backgroundColor: generateRandomColor(), opacity: .1 }}
+                                            className={'absolute top-0 bottom-0 left-0 right-0'}>
                                         </div>
                                     </CardHeader>
                                     <CardContent>
-                                        
                                         <p className={'text-xl font-bold'}> {course?.courseName} {course?.courseNumber}</p>
                                     </CardContent>
                                     <CardFooter>
                                         <div>
                                             <p>{course?.overview?.substring(0,50)}</p>
-                                            <div className={'flex gap-2'}>
+                                            <div className={'flex gap-2 font-bold mt-4'}>
                                                 <p>{course?.semester.year}</p>
                                                 <p>{course?.semester.semesterType}</p>
                                             </div>
