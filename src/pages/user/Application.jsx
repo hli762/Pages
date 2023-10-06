@@ -12,6 +12,21 @@ import {
     TableHeader,
     TableRow,
 } from "../../components/ui/table";
+import {
+    Menubar,
+    MenubarCheckboxItem,
+    MenubarContent,
+    MenubarItem,
+    MenubarMenu,
+    MenubarRadioGroup,
+    MenubarRadioItem,
+    MenubarSeparator,
+    MenubarShortcut,
+    MenubarSub,
+    MenubarSubContent,
+    MenubarSubTrigger,
+    MenubarTrigger,
+  } from "../../components/ui/menubar";
 
 import {
     Select,
@@ -80,23 +95,24 @@ function Application(props) {
                                 <TableCell >{course.courseName}</TableCell>
                                 <TableCell>{course.enrolledStudents}/{course.estimatedStudents}</TableCell>
                                 <TableCell>
-                                    <Select>
-                                        <SelectTrigger className="w-[180px]">
-                                            <SelectValue placeholder="view assignment" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectGroup>
-                                            <SelectLabel>Assgiment</SelectLabel>
-                                            {
-                                                course.assignments?.map((assignment,index)=>(
-                                                        <SelectItem key={assignment.id} value={assignment?.assignmentType}>
-                                                            {assignment?.assignmentType}
-                                                        </SelectItem>
-                                                ))
-                                            }
-                                            </SelectGroup>
-                                        </SelectContent>
-                                    </Select>
+                                    <Menubar className='flex justify-center'>
+                                        <MenubarMenu>
+                                            <MenubarTrigger>View Assignment</MenubarTrigger>
+                                            <MenubarContent>
+                                                {
+                                                    course.assignments?.map((assignment,index)=>(
+                                                        <div key={assignment.id} >
+                                                             <MenubarSeparator />
+                                                            <MenubarItem inset> {assignment?.assignmentType}</MenubarItem>
+                                                          
+                                                        </div>
+                                                           
+                                                    ))
+                                                }
+                                                
+                                            </MenubarContent>
+                                        </MenubarMenu>
+                                    </Menubar>
                                 </TableCell>
                                 <TableCell >
                                     <Button onClick={() => handleApply(course.id)}>
