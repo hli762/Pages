@@ -18,18 +18,18 @@ import SupervisorCourses from "../../components/supervisor/Courses";
 function Application(props) {
     const [value,setValue] = useState("application")
 
+        
     
- 
     return (
         <div className={'flex'}>
             <div className={'basis-1/6 border-r-[1px] border-black h-screen flex justify-center pt-8'}>
+             
                 <Select  defaultValue={value} onValueChange={(value)=>{setValue(value)}}
-                         className={cn('w-75')}
                 >
-                    
-                       
+                
                     <SelectTrigger className="w-[180px]">
-                        <SelectValue placeholder="Applications" />
+                        
+                        <SelectValue className='text-black' placeholder="Select a application" />
                     </SelectTrigger>
                     <SelectContent>
                         <SelectGroup >

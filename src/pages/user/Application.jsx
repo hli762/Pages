@@ -14,31 +14,15 @@ import {
 } from "../../components/ui/table";
 import {
     Menubar,
-    MenubarCheckboxItem,
     MenubarContent,
     MenubarItem,
     MenubarMenu,
-    MenubarRadioGroup,
-    MenubarRadioItem,
     MenubarSeparator,
-    MenubarShortcut,
-    MenubarSub,
-    MenubarSubContent,
-    MenubarSubTrigger,
     MenubarTrigger,
   } from "../../components/ui/menubar";
 
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
-  } from "../../components/ui/select";
 
-
+import Loading from '../../components/Loading';
 import useApplyModal from "../../hooks/useApplyModal";
 import ApplyModal from "../../components/modals/ApplyModal";
 import fetcher from '../../lib/fetcher';
@@ -57,9 +41,7 @@ function Application(props) {
         applyModal.onOpen()
     }
     if(isLoading){
-        return <div className='text-lg'>
-            Loading...
-        </div>
+        return <Loading/>
     }
     
     return (

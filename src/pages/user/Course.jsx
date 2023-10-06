@@ -1,8 +1,5 @@
 import React, {useState,useEffect} from 'react';
-import {Progress} from "../../components/ui/progress";
-import {Checkbox} from "../../components/ui/checkbox";
 
-import bg from '../../images/bg.jpg'
 import { Link, useNavigate } from "react-router-dom";
 
 import {
@@ -31,6 +28,7 @@ import fetcher from "../../lib/fetcher";
 import useCreateCourseModal from '../../hooks/useCreateCourseModal';
 import CreateCourseModal from '../../components/modals/CreateCourseModal';
 import { getUser } from '../../lib/getUser';
+import Loading from '../../components/Loading';
 
 function Course(props) {
     const [showCard,setShowCard] = useState(true)
@@ -40,6 +38,9 @@ function Course(props) {
     const createCourseModal = useCreateCourseModal()
     const {userType} = getUser()
     
+    if(isLoading){
+        return <Loading/>
+    }
 
     return (
         <div className='flex w-100 p-4'>
