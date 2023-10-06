@@ -163,7 +163,7 @@ function ApplyModal({courseId}) {
                    
                     
                     <div className='flex justify-end w-full'>
-                        <Button type="submit" variant="secondary">Next</Button>
+                        <Button type="submit" variant="secondary">Submit</Button>
                     </div>
                 </form>
             </Form>

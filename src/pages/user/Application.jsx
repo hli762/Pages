@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import {Progress} from "../../components/ui/progress";
-import {Checkbox} from "../../components/ui/checkbox";
-import {Button} from "../../components/ui/button";
+import { Progress } from "../../components/ui/progress";
+import { Checkbox } from "../../components/ui/checkbox";
+import { Button } from "../../components/ui/button";
 import useSwr from 'swr'
 import {
     Table,
@@ -19,13 +19,14 @@ import {
     MenubarMenu,
     MenubarSeparator,
     MenubarTrigger,
-  } from "../../components/ui/menubar";
+} from "../../components/ui/menubar";
 
 
 import Loading from '../../components/Loading';
 import useApplyModal from "../../hooks/useApplyModal";
 import ApplyModal from "../../components/modals/ApplyModal";
 import fetcher from '../../lib/fetcher';
+import { Card } from '../../components/ui/card';
 
 
 
@@ -33,80 +34,93 @@ import fetcher from '../../lib/fetcher';
 
 function Application(props) {
     const applyModal = useApplyModal()
-    const {data:courses,isLoading} = useSwr('/GetAllCourses',fetcher)
-    const [courseId,setCourseId] = useState(null)
+    const { data: courses, isLoading } = useSwr('/GetAllCourses', fetcher)
+    const [courseId, setCourseId] = useState(null)
     console.log(courses);
-    const handleApply = (id)=>{
+    const colorMap = {
+        normal: 'inherit',
+        success: '#16a34a',
+        fail: '#dc2626',
+    }
+    const handleApply = (id) => {
         setCourseId(id)
         applyModal.onOpen()
     }
-    if(isLoading){
-        return <Loading/>
+    if (isLoading) {
+        return <Loading />
     }
-    
+
     return (
         <div className='flex justify-center relative'>
-            <ApplyModal courseId={courseId}/>
-            <div className={'hidden md:block'}>
-                <Progress value={66} className='w-[200px] absolute top-14 left-10 '/>
-                <div className='w-[200px] absolute top-20 left-10 items-center gap-2 flex'>
-                    <Checkbox id="terms" disabled checked={true} />
-                    <label
-                        htmlFor="terms"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                        In Progress
-                    </label>
+            <ApplyModal courseId={courseId} />
+            <Card className="p-2 m-2">
+                <div className='flex justify-center font-bold'>My Application</div>
+                <div className={'hidden md:block p-6'}>
+                    <div className='mb-10'>
+                        <div>TODO: Course Name + Course Number</div>
+                        <Progress value={66} className='w-[200px] mb-2 ' />
+                        <div className='w-[200px] top-20 left-10 items-center gap-2 flex'>
+                            <label
+                                htmlFor="terms"
+                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                style={{ color: colorMap.normal }}
+                            >
+                                In Progress
+                            </label>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            
-            <div className={'p-6 w-[800px]'}>
-                <Table>
-                    <TableCaption>A list of your recent assignments.</TableCaption>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>Course Name</TableHead>
-                            <TableHead>Course Marker</TableHead>
-                            <TableHead>Course Information</TableHead>
-                            <TableHead>Apply Now</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {courses?.map((course) => (
-                            <TableRow key={course.id}>
-                                <TableCell >{course.courseName}</TableCell>
-                                <TableCell>{course.enrolledStudents}/{course.estimatedStudents}</TableCell>
-                                <TableCell>
-                                    <Menubar className='flex justify-center'>
-                                        <MenubarMenu>
-                                            <MenubarTrigger>View Assignment</MenubarTrigger>
-                                            <MenubarContent>
-                                                {
-                                                    course.assignments?.map((assignment,index)=>(
-                                                        <div key={assignment.id} >
-                                                             <MenubarSeparator />
-                                                            <MenubarItem inset> {assignment?.assignmentType}</MenubarItem>
-                                                          
-                                                        </div>
-                                                           
-                                                    ))
-                                                }
-                                                
-                                            </MenubarContent>
-                                        </MenubarMenu>
-                                    </Menubar>
-                                </TableCell>
-                                <TableCell >
-                                    <Button onClick={() => handleApply(course.id)}>
-                                        Apply
-                                    </Button>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </div>
+            </Card>
 
+            <Card className="p-2 m-2">
+                <div className='flex justify-center font-bold'>My Courses</div>
+                <div className={'p-6 w-[800px]'}>
+                    <Table>
+                        <TableCaption>A list of your recent assignments.</TableCaption>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Course Name</TableHead>
+                                <TableHead>Course Marker</TableHead>
+                                <TableHead>Course Information</TableHead>
+                                <TableHead>Apply Now</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {courses?.map((course) => (
+                                <TableRow key={course.id}>
+                                    <TableCell >{course.courseName}</TableCell>
+                                    <TableCell>{course.enrolledStudents}/{course.estimatedStudents}</TableCell>
+                                    <TableCell>
+                                        <Menubar className='flex justify-center'>
+                                            <MenubarMenu>
+                                                <MenubarTrigger>View Assignment</MenubarTrigger>
+                                                <MenubarContent>
+                                                    {
+                                                        course.assignments?.map((assignment, index) => (
+                                                            <div key={assignment.id} >
+                                                                <MenubarSeparator />
+                                                                <MenubarItem inset> {assignment?.assignmentType}</MenubarItem>
+
+                                                            </div>
+
+                                                        ))
+                                                    }
+
+                                                </MenubarContent>
+                                            </MenubarMenu>
+                                        </Menubar>
+                                    </TableCell>
+                                    <TableCell >
+                                        <Button onClick={() => handleApply(course.id)}>
+                                            Apply
+                                        </Button>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </div>
+            </Card>
         </div>
     );
 }
