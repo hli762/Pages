@@ -32,7 +32,7 @@ const Modal= ({isOpen,onClose,onSubmit,title,body,footer,actionLabel,disabled}) 
                                     flex flex-col w-full bg-black outline-none focus:outline-none
                     '>
                         {/*Header */}
-                        <div className='flex items-center justify-between p-10 rounded-t'>
+                        <div className='flex items-center justify-between p-4 rounded-t'>
                             <h3 className='text-3xl font-semibold text-white'>{title}</h3>
                             <button onClick={handleClose}
                                     className='p-1 ml-auto border-0 hover:opacity-70 transition'>
@@ -40,7 +40,7 @@ const Modal= ({isOpen,onClose,onSubmit,title,body,footer,actionLabel,disabled}) 
                             </button>
                         </div>
                         {/* body */}
-                        <div className='relative p-10 flex-auto'>
+                        <div className='relative p-4 flex-auto'>
                             {body}
                         </div>
                       
