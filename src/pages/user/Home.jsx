@@ -37,6 +37,7 @@ const Home = () => {
         if(user?.cv){
             navigate('/course')
         }
+     
     },[user])
 
     const [cv, setCv] = useState(null);

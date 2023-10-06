@@ -53,18 +53,30 @@ function Course(props) {
                 {
                      userType === "MarkerCoordinator"
                       && 
-                     <div   onClick={()=>{createCourseModal.onOpen()}} 
-                        className='flex justify-center underline cursor-pointer mt-6'>
-                            Add Course
-                     </div>
+                      <>
+                        <div   onClick={()=>{createCourseModal.onOpen()}} 
+                                className='flex justify-center underline cursor-pointer mt-6'>
+                                Add Course
+                        </div>
+                        <div   onClick={()=>{navigate('/supervisor')}} 
+                                className='flex justify-center underline cursor-pointer mt-6'>
+                                View all applications
+                        </div>
+                      </>
+                    
+                }
+
+                {
+                    userType === "User"
+                    &&
+                    <Link   to={'/application'}
+                    className='flex justify-center underline cursor-pointer mt-6'>
+                        Apply to be a marker
+                    </Link>
+
                 }
 
                
-
-                <Link   to={'/application'}
-                        className='flex justify-center underline cursor-pointer mt-6'>
-                    Apply to be a marker
-                </Link>
                 
             </div>
             
