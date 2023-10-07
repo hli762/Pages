@@ -1,2 +1,2 @@
-/webapi/* http://13.54.223.59:3000/webapi/:splat 200
+/webapi/* http://13.54.223.59/webapi/:splat 200
 /* /index.html 200
