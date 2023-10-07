@@ -23,9 +23,9 @@ const Navbar = () => {
 
             }
             
-            <Link to={'/'} className={'text-white'}>
+            {/* <Link to={'/'} className={'text-white'}>
                 Course-supervisor
-            </Link>
+            </Link> */}
 
             <UserMenu />
             

@@ -102,19 +102,6 @@ const Home = () => {
 
     return (
         <div className='flex justify-center relative'>
-            <div className={'hidden md:block'}>
-                <Progress value={33} className='w-[200px] absolute top-14 left-10 '/>
-                <div className='w-[200px] absolute top-20 left-10 items-center gap-2 flex'>
-                    <Checkbox id="terms" disabled checked={true} />
-                    <label
-                        htmlFor="terms"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                        Submit
-                    </label>
-                </div>
-            </div>
-
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 py-4">
                     <FormField
@@ -298,7 +285,7 @@ const Home = () => {
                     />
 
                     <div className='flex justify-end'>
-                        <Button type="submit">Next</Button>
+                        <Button type="submit">Submit</Button>
                     </div>
                 </form>
             </Form>

@@ -92,7 +92,7 @@ function Course(props) {
                         {
                             courses?.map((course, index) => (
                                 <Card
-                                    onClick={() => navigate(`${course.id}`)}
+                                    onClick={() => navigate(`/course/${course.id}`)}
                                     className={'cursor-pointer relative'} key={course?.id}
                                 >
                                     <CardHeader className={'p-0 pt-6'}>

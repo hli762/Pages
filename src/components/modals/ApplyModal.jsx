@@ -34,7 +34,7 @@ function ApplyModal({courseId}) {
                     ...data,
                 })
                 toast.success("uploaded sucessfully! 🚀🚀🚀")
-
+                applyModal.onClose();
             } catch (e) {
                 toast.error(e.message)
             }

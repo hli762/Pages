@@ -111,8 +111,8 @@ function Application(props) {
                                         </Menubar>
                                     </TableCell>
                                     <TableCell >
-                                        <Button onClick={() => handleApply(course.id)}>
-                                            Apply
+                                        <Button disabled={course.enrolledStudents >= course.estimatedStudents} onClick={() => handleApply(course.id)}>
+                                            {course.enrolledStudents >= course.estimatedStudents ? 'Full' : 'Apply'}
                                         </Button>
                                     </TableCell>
                                 </TableRow>
