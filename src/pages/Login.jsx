@@ -4,6 +4,7 @@ import Logo from '../images/logo.png';
 import { useEffect } from 'react';
 import request from '../lib/request';
 import { useNavigate } from 'react-router-dom';
+import { getHomeUrl } from '../lib/utils';
 
 
 const Login = () => {
@@ -44,7 +45,7 @@ const Login = () => {
             }));
           
             // localStorage.setItem('userType', JSON.stringify({userId:userData.id}));
-            navigate('/')
+            navigate(getHomeUrl(userData.type))
         }catch(e){
             console.log(e.message);
         }

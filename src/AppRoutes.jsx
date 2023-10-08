@@ -8,6 +8,9 @@ import Course from "./pages/user/Course";
 import SingleCourse from './pages/Course';
 import SupervisorHome from './pages/supervisor/Home'
 import SupervisorApplication from './pages/supervisor/Application'
+import CoordinatorHome from './pages/coordinator/Home';
+import CoordinatorApplication from './pages/coordinator/Application'
+import CoordinatorCourse from './pages/coordinator/Course'
 
 const AppRoutes = [
   {
@@ -39,6 +42,18 @@ const AppRoutes = [
   {
     path: '/supervisor/application',
     element: <SupervisorApplication/>
+  },
+  {
+    path: '/coordinator',
+    element: <CoordinatorHome/>
+  },
+  {
+    path: '/coordinator/application',
+    element: <CoordinatorApplication/>
+  },
+  {
+    path: '/coordinator/course',
+    element: <CoordinatorCourse/>
   },
   {
     path:'/beMarker',

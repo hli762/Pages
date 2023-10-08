@@ -65,30 +65,6 @@ export const courseFormSchama = z.object({
 
 })
 
-export const createCourseDetails = [
-    "Course Name:",
-    "Course Number:",
-    "Course Director",
-    "Course Supervisor",
-    "Needs Marker (y/n):",
-    "Number of Markers:",
-    "Currently enrolled students:",
-    "Total marking hours:"
-]
-
-export const modifyCourseDetails = [
-    "Course Name:",
-    "Course Number:",
-    "Course Director",
-    "Course Supervisor",
-    "Needs Marker (y/n):",
-    "Number of Markers:",
-    "Currently enrolled students:",
-    "Total marking hours:"
-]
-
-
-
 
 
 
