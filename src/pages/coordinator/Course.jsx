@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
     Table,
@@ -21,10 +21,14 @@ import Modal from '../../components/Modal';
 import { Link } from 'react-router-dom';
 import request from '../../lib/request';
 import { useToast } from "../../components/ui/use-toast"
+import { getSemesterId } from '../../lib/utils';
+import { useNavigate } from 'react-router-dom';
 
 
 function Courses(props) {
-    const { data: courses, isLoading } = useSwr('/GetAllCourses', fetcher)
+    const semesterId = getSemesterId();
+    const navigate = useNavigate()
+    const { data: courses, isLoading } = useSwr(['/GetCoursesBySemster', semesterId], ([url, semesterId]) => semesterId && fetcher(`${url}/${semesterId}`))
     const [editId, setEditId] = useState()
     const [toDeleteId, setToDeleteId] = useState();
     const [showDeleteTips, setShowDeleteTips] = useState(false);
@@ -38,6 +42,16 @@ function Courses(props) {
         })
         toast.success("delete sucessfully! 🚀🚀🚀")
         setShowDeleteTips(false);
+    }
+
+    useEffect(() => {
+        if(!semesterId) {
+            navigate('/coordinator')
+        }
+    }, [semesterId])
+
+    if(!semesterId) {
+        return null;
     }
 
     if (isLoading) {

@@ -13,12 +13,17 @@ import { MdRadioButtonUnchecked } from 'react-icons/md'
 import useSwr from "swr";
 import fetcher from '../../lib/fetcher';
 import { Button } from '../../components/ui/button';
+import { getSemesterId } from '../../lib/utils';
+import { useNavigate } from 'react-router-dom';
 
 function Application(props) {
+    const semesterId = getSemesterId();
+    const navigate = useNavigate()
+
     const [currentCourseId, setCurrentCourseId] = useState();
     const [currentCourse, setCurrentCourse] = useState();
 
-    const { data: courses, isLoading } = useSwr('/GetAllCourses', fetcher)
+    const { data: courses, isLoading } = useSwr(['/GetCoursesBySemster', semesterId], ([url, semesterId]) => semesterId && fetcher(`${url}/${semesterId}`))
 
     const { data: applications } = useSwr(['/GetApplicationsByCourse', currentCourseId], ([url, id]) => id && fetcher(`${url}/${id}`))
 
@@ -27,6 +32,12 @@ function Application(props) {
         setCurrentCourseId(courses?.[0]?.id)
         setCurrentCourse(courses?.[0])
     }, [courses?.[0]?.id]);
+
+    useEffect(() => {
+        if(!semesterId) {
+            navigate('/coordinator')
+        }
+    }, [semesterId])
 
     return (
         <div className={'flex'}>
