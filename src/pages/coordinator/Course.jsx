@@ -28,7 +28,8 @@ import { useNavigate } from 'react-router-dom';
 function Courses(props) {
     const semesterId = getSemesterId();
     const navigate = useNavigate()
-    const { data: courses, isLoading } = useSwr(['/GetCoursesBySemster', semesterId], ([url, semesterId]) => semesterId && fetcher(`${url}/${semesterId}`))
+    const [refresh, setRefresh] = useState(0);
+    const { data: courses, isLoading } = useSwr(['/GetCoursesBySemster', semesterId, refresh], ([url, semesterId]) => semesterId && fetcher(`${url}/${semesterId}`))
     const [editId, setEditId] = useState()
     const [toDeleteId, setToDeleteId] = useState();
     const [showDeleteTips, setShowDeleteTips] = useState(false);
@@ -42,6 +43,10 @@ function Courses(props) {
         })
         toast.success("delete sucessfully! 🚀🚀🚀")
         setShowDeleteTips(false);
+    }
+
+    const onSuccess = () => {
+        setRefresh(refresh + 1);
     }
 
     useEffect(() => {
@@ -60,7 +65,7 @@ function Courses(props) {
 
     return (
         <div className='p-6'>
-            <EditCourseModal id={editId} />
+            <EditCourseModal id={editId} onSuccess={onSuccess}/>
             <CreateCourseModal />
             <Button className="mt-6" onClick={() => { createCourseModal.onOpen() }}>
                 Add Course

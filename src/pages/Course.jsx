@@ -163,8 +163,14 @@ function Course(props) {
                         </Card>
 
                     </TabsContent>
-                    <TabsContent value="WorkingHours">
-                        {hours?.map(hour => hour.remainHour)}
+                    <TabsContent value="WorkingHours" className="grid grid-cols-1 md:grid-cols-2 lg:md:grid-cols-3 gap-4">
+                        {hours?.map(hour => <Card className="pt-6 mb-6">
+                            <CardContent>
+                            <div className='font-bold'>name: {hour.user?.name}</div>
+                            <div>email: {hour.user?.email}</div>
+                            <div className='font-bold'>hours: {hour.remainHour}</div>
+                            </CardContent>
+                        </Card>)}
                     </TabsContent>
                 </div>
             </Tabs>

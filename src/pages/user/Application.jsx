@@ -72,8 +72,8 @@ function Application(props) {
                 <div className={'hidden md:block p-6'}>
                     <div className='mb-10'>
                         {
-                            applications?.map(application => <div className='mb-8' key={application.id}>
-                                <div>{application.course?.courseName} {application.course?.courseNumber}</div>
+                            applications?.map(application => <div className='mb-8 border-b pb-4' key={application.id}>
+                                <div className='font-bold'>{application.course?.courseName} {application.course?.courseNumber}</div>
                                 <Progress value={processMap[application.currentStatus]} className='w-[200px] mb-2 ' />
                                 <div className='w-[200px] top-20 left-10 items-center gap-2 flex'>
                                     <label

@@ -29,10 +29,10 @@ function Home(props) {
 
     return (
         <div className={'h-screen flex flex-col gap-10 items-center justify-center'}>
+            <span className='text-xl'>Please select semester</span>
             <Select defaultValue={currentSemester} onValueChange={(value) => { setCurrentSemester(value) }}
             >
                 <SelectTrigger className="w-[180px]">
-
                     <SelectValue className='text-black' placeholder="Select a semester" />
                 </SelectTrigger>
                 <SelectContent>
@@ -43,28 +43,31 @@ function Home(props) {
                     </SelectGroup>
                 </SelectContent>
             </Select>
-            <Link to={'/coordinator/application'}>
-                <Button className={'w-[600px] h-[80px] flex gap-6'}>
-                    <MdSettingsApplications color={'white'} size={40} />
-                    <span>
-                        Application
-                    </span>
-                </Button>
-            </Link>
+            <div className={`flex flex-col gap-10 items-center justify-center ${!currentSemester && 'hidden'}`}>
 
-            <Link to={'/coordinator/course'}>
-                <Button className={'w-[600px] h-[80px] flex gap-6'}>
-                    <SiCoursera color={'white'} size={40} />
-                    Course
-                </Button>
-            </Link>
+                <Link to={'/coordinator/application'}>
+                    <Button className={'w-[600px] h-[80px] flex gap-6'}>
+                        <MdSettingsApplications color={'white'} size={40} />
+                        <span>
+                            Application
+                        </span>
+                    </Button>
+                </Link>
 
-            <Link to={'/coordinator/application'}>
-                <Button className={'w-[600px] h-[80px] flex gap-6'}>
-                    <SiMakerbot color={'white'} size={40} />
-                    Pre-assignment Makers
-                </Button>
-            </Link>
+                <Link to={'/coordinator/course'}>
+                    <Button className={'w-[600px] h-[80px] flex gap-6'}>
+                        <SiCoursera color={'white'} size={40} />
+                        Course
+                    </Button>
+                </Link>
+
+                <Link to={'/coordinator/application'}>
+                    <Button className={'w-[600px] h-[80px] flex gap-6'}>
+                        <SiMakerbot color={'white'} size={40} />
+                        Pre-assignment Makers
+                    </Button>
+                </Link>
+            </div>
 
         </div>
     );

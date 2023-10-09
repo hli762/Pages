@@ -1,8 +1,5 @@
 
 import React, { useCallback, useEffect, useState } from 'react'
-
-import { useToast } from "../ui/use-toast"
-
 import Modal from '../Modal'
 import { Input } from "../ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
@@ -17,6 +14,7 @@ import Loading from '../../components/Loading';
 import request from '../../lib/request';
 import { Checkbox } from '../ui/checkbox';
 import { getSemesterId } from '../../lib/utils';
+import toast from 'react-hot-toast';
 
 const formSchema = z.object({
     // username: z.string().min(2, {
@@ -25,8 +23,7 @@ const formSchema = z.object({
 })
 
 
-function EditCourseModal({ id }) {
-    const { toast } = useToast()
+function EditCourseModal({ id, onSuccess }) {
     const editCourseModal = useEditCourseModal()
 
     const { data: course, isLoading } = useSwr(['/getCourseById', id], ([url, id]) => id && fetcher(url + '/' + id))
@@ -42,6 +39,7 @@ function EditCourseModal({ id }) {
             })
             toast.success("submit sucessfully! 🚀🚀🚀")
             editCourseModal.onClose();
+            onSuccess?.();
         } catch (e) {
             toast({
                 title: "error",
