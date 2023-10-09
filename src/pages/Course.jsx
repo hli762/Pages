@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import useSwr from "swr";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod"
 import {
     Tabs,
     TabsContent,
@@ -9,16 +12,75 @@ import {
 import fetcher from "../lib/fetcher";
 import { useParams } from 'react-router-dom'
 import { Card, CardTitle, CardContent } from '../components/ui/card';
+import { Button } from '../components/ui/button';
+import Modal from '../components/Modal';
+import { Form, FormField, FormItem, FormControl, FormLabel, FormDescription } from '../components/ui/form';
+import { Input } from '../components/ui/input';
+import request from '../lib/request';
+import toast from 'react-hot-toast'
+import { getUser } from '../lib/getUser';
 
 function Course(props) {
-    const [showCard, setShowCard] = useState(true)
-    const [courseDetail, setCourseDetail] = useState(null);
+    const [showAddMarker, setShowAddMarker] = useState(false);
+    const [refreh, setRefresh] = useState(0);
+    const [currentModal, setCurrentModal] = useState('marker'); // marker || supervisor
     const { id } = useParams();
+    const userType = getUser()?.userType;
     const { data: course, isLoading } = useSwr(`/GetCourseById/${id}`, fetcher)
     const { data: assignments } = useSwr(`/GetAssignmentsByCourse/${id}`, fetcher)
-    const { data: users } = useSwr(`/GetUserByCourse/${id}`, fetcher)
-    const { data: courseSupervisor } = useSwr(`/GetCourseSupervisorByCourse/${id}`, fetcher)
+    const { data: users } = useSwr([`/GetUserByCourse/${id}`, refreh], ([url]) => fetcher(url))
+    const { data: courseSupervisor } = useSwr([`/GetCourseSupervisorByCourse/${id}`, refreh], ([url]) => fetcher(url))
     const { data: hours } = useSwr(`/GetMarkingHoursByCourse/${id}`, fetcher)
+
+    const userFormSchema = z.object({
+        email: z.string()
+    })
+    const form = useForm({
+        resolver: zodResolver(userFormSchema),
+        defaultValues: {},
+    })
+
+    const onSubmit = async (data) => {
+        try {
+            const { email } = data;
+            await request.post(currentModal === 'marker' ? `AddUserToCourseByEmail/${email}/${id}` : `AddCourseSupervisorToCourseByEmail/${email}/${id}`, {
+                email,
+                Courseid: id,
+            })
+            toast.success("submit sucessfully! 🚀🚀🚀")
+            setShowAddMarker(false)
+            setRefresh(refreh + 1)
+        } catch (e) {
+            toast.error(e.messege)
+        }
+    }
+
+    const removeUser = async (userId) => {
+        try {
+            await request.post(`RemoveUserFromCourse/${userId}/${id}`, {
+                Userid: userId,
+                Courseid: id,
+            })
+            toast.success("submit sucessfully! 🚀🚀🚀")
+            setRefresh(refreh + 1)
+        } catch (e) {
+            toast.error(e.messege)
+        }
+    }
+
+    const removeSupervisor = async (userId) => {
+        try {
+            await request.post(`RemoveCourseSupervisorFromCourse/${userId}/${id}`, {
+                Userid: userId,
+                Courseid: id,
+            })
+            toast.success("submit sucessfully! 🚀🚀🚀")
+            setRefresh(refreh + 1)
+        } catch (e) {
+            toast.error(e.messege)
+        }
+    }
+
     return (
         <div className='w-full'>
             <Tabs defaultValue="Overview" className="flex w-full mt-[80px]">
@@ -48,23 +110,53 @@ function Course(props) {
                     </TabsContent>
                     <TabsContent value="People">
                         <Card className="p-2 mb-6">
-                            <CardTitle>Course Supervisor</CardTitle>
+                            <CardTitle>
+                                Course Supervisor
+                                {
+                                    userType === 'MarkerCoordinator' &&
+                                    <Button className="ml-6" onClick={() => {
+                                        setCurrentModal('supervisor');
+                                        setShowAddMarker(true);
+                                    }}>Add Course Supervisor</Button>
+                                }
+                            </CardTitle>
                             <CardContent>
                                 {courseSupervisor?.map(courseSupervisor => <div key={courseSupervisor.id}>
-                                    <div className='mt-2'>
-                                        <div className='font-bold'>{courseSupervisor.name}</div>
-                                        <div>{courseSupervisor.email}</div>
+                                    <div className='mt-6 pb-4 border-b'>
+                                        <div className='font-bold'>
+                                            <div className='flex'>
+                                                <div className='font-bold mr-4'>{courseSupervisor.name}</div>
+                                                {
+                                                    userType === 'MarkerCoordinator' &&
+                                                    <Button size="small" onClick={() => removeSupervisor(courseSupervisor.id)}>Remove</Button>}
+                                            </div>
+                                        </div>
+                                        <div>{courseSupervisor.email} {courseSupervisor.isDirector && <span className='bg-black text-white font-normal text-sm p-1 ml-2 rounded'>Director</span>}</div>
                                     </div>
                                 </div>)}
                             </CardContent>
                         </Card>
                         <Card className="p-2">
-                            <CardTitle>Markers</CardTitle>
+                            <CardTitle>
+                                Markers
+                                {
+                                    userType === 'MarkerCoordinator' && 
+                                    <Button className="ml-6" onClick={() => {
+                                    setCurrentModal('marker');
+                                    setShowAddMarker(true)
+                                }}>Add Marker</Button>}
+                            </CardTitle>
                             <CardContent>
                                 {users?.map(user => <div key={user.id}>
-                                    <div className='mt-2'>
-                                        <div className='font-bold'>{user.name}</div>
+                                    <div className='mt-6 pb-4 border-b'>
+                                        <div className='flex'>
+                                            <div className='font-bold mr-4'>{user.name}</div>
+                                            {
+                                                userType === 'MarkerCoordinator' &&
+                                                <Button size="small" onClick={() => removeUser(user.id)}>Remove</Button>}
+                                        </div>
                                         <div>{user.email}</div>
+
                                     </div>
                                 </div>)}
                             </CardContent>
@@ -76,6 +168,42 @@ function Course(props) {
                     </TabsContent>
                 </div>
             </Tabs>
+            <Modal
+                isOpen={showAddMarker}
+                title={currentModal === 'marker' ? "Add Marker" : "Add Supervisor"}
+                actionLabel='Save'
+                onClose={() => setShowAddMarker(false)}
+                onSubmit={onSubmit}
+                body={
+                    <Form {...form} >
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 p-4">
+                            <FormField
+                                control={form.control}
+                                name="email"
+                                render={({ field }) => (
+                                    <FormItem className="rounded-md border p-4">
+
+                                        <div>
+                                            <FormLabel className='text-white text-md pb-2 mb-2'>
+                                                Email
+                                            </FormLabel>
+                                            <FormControl>
+                                                <Input {...field} type="email" className="mt-2" />
+                                            </FormControl>
+                                            {/* <FormDescription className='text-white'>
+                                                                    Were you a maker before
+                                                                </FormDescription> */}
+                                        </div>
+                                    </FormItem>
+                                )}
+                            />
+                            <div className='flex justify-end w-full'>
+                                <Button type="submit" variant="secondary">Submit</Button>
+                            </div>
+                        </form>
+                    </Form>
+                }
+            />
         </div>
     );
 }

@@ -26,7 +26,6 @@ function ApplyModal({courseId, onApply}) {
     const {userId} = getUser()
     console.log(courseId,userId);
     const onSubmit = async(data)=> {
-        console.log('aaa', data)
             try {
                 await request.post('AddApplication',{
                     currentStatus:"on progress",
