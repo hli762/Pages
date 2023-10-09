@@ -44,6 +44,7 @@ const Login = () => {
                 userType:userData.type,
                 userEmail: userData.email,
                 userName: userData.name,
+                userPicture: userData.picture,
             }));
           
             // localStorage.setItem('userType', JSON.stringify({userId:userData.id}));

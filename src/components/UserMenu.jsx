@@ -25,7 +25,7 @@ import { FaSignOutAlt } from 'react-icons/fa'
 import { AiFillEdit } from 'react-icons/ai'
 
 export default function UserMenu() {
-    const { userId, userType, userEmail, userName } = getUser()
+    const { userId, userType, userEmail, userName, userPicture } = getUser()
     const navigate = useNavigate()
     const { data: user } = useSwr(`/GetUserById/${userId}`, fetcher)
     console.log(user);
@@ -35,10 +35,16 @@ export default function UserMenu() {
         navigate('/login')
     }
 
+    console.log('userPicture', userPicture?.split('://'))
+
     return (
         <div className='flex items-center gap-2'>
             <DropdownMenu>
                 <DropdownMenuTrigger>
+                <Avatar>
+                    <AvatarImage src={userPicture} alt={userName} />
+                </Avatar>
+
                     <p className=' text-white'>
                         {userName}
                     </p>
