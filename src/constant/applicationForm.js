@@ -47,19 +47,9 @@ export const applyFormSchama  = z.object({
   haveMarkedBefore:z.boolean().default(false).optional(),
   isRecommanded:z.boolean().default(false).optional(),
   haveDoneBefore:z.boolean().default(false).optional(),
-  previousGrade:z.number(),
+  previousGrade:z.string(),
   haveDoneReleventCourse:z.string()
 })
-
-
-
-export const applyToMaker = [
-    "Were you a maker before?",
-    "Were yuu recommender by others?",
-    "Could you provide previous grade?",
-    "Did you take relevant course before?"
-]
-
 
 export const courseFormSchama = z.object({
 

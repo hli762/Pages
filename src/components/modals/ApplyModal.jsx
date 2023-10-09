@@ -19,13 +19,14 @@ import request from '../../lib/request';
 import { getUser } from '../../lib/getUser';
 
 
-function ApplyModal({courseId}) {
+function ApplyModal({courseId, onApply}) {
     
     const [isLoading,setIsLoading] = useState(false)
     const applyModal = useApplyModal()
     const {userId} = getUser()
     console.log(courseId,userId);
     const onSubmit = async(data)=> {
+        console.log('aaa', data)
             try {
                 await request.post('AddApplication',{
                     currentStatus:"on progress",
@@ -35,6 +36,7 @@ function ApplyModal({courseId}) {
                 })
                 toast.success("uploaded sucessfully! 🚀🚀🚀")
                 applyModal.onClose();
+                onApply?.();
             } catch (e) {
                 toast.error(e.message)
             }
@@ -100,7 +102,7 @@ function ApplyModal({courseId}) {
                                     Any recommender?
                                     </FormLabel>
                                     <FormDescription className='text-white'>
-                                    Were yuu recommender by others?
+                                    Were you recommender by others?
                                     </FormDescription>
                                 </div>
                             </FormItem>
@@ -137,7 +139,7 @@ function ApplyModal({courseId}) {
                             <FormItem>
                             <FormLabel className='text-white text-md'>Could you provide previous grade?</FormLabel>
                             <FormControl>
-                                <Input type="number" {...field} />
+                                <Input type="number" {...field}/>
                             </FormControl>
                             <FormMessage />
                             </FormItem>
