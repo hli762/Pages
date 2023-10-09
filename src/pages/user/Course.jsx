@@ -108,8 +108,8 @@ function Course(props) {
                                         <div>
                                             <p>{course?.overview?.substring(0, 50)}</p>
                                             <div className={'flex gap-2 font-bold mt-4'}>
-                                                <p>{course?.semester.year}</p>
-                                                <p>{course?.semester.semesterType}</p>
+                                                <p>{course?.semester?.year}</p>
+                                                <p>{course?.semester?.semesterType}</p>
                                             </div>
                                         </div>
 

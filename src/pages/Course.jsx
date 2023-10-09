@@ -8,13 +8,16 @@ import {
 } from "../components/ui/tabs"
 import fetcher from "../lib/fetcher";
 import { useParams } from 'react-router-dom'
+import { Card, CardTitle, CardContent } from '../components/ui/card';
 
 function Course(props) {
     const [showCard, setShowCard] = useState(true)
     const [courseDetail, setCourseDetail] = useState(null);
     const { id } = useParams();
     const { data: course, isLoading } = useSwr(`/GetCourseById/${id}`, fetcher)
-    console.log('cc', course)
+    const {data: assignments} = useSwr(`/GetAssignmentsByCourse/${id}`, fetcher)
+    const {data: users} = useSwr(`/GetUserByCourse/${id}`, fetcher)
+    const {data: hours} = useSwr(`/GetMarkingHoursByCourse/${id}`, fetcher)
 
     return (
         <div className='w-full'>
@@ -30,17 +33,26 @@ function Course(props) {
 
                 <div className='basis-5/6'>
                     <TabsContent value="Assignment">
-                        {course?.assignments}
+                        {
+                            assignments?.map(assignment => <div key={assignment.id}>
+                                <Card className="p-2 mb-2">
+                                    <CardTitle>{assignment.assignmentType}</CardTitle>
+                                    <CardContent>{assignment.description}</CardContent>
+                                </Card>
+                            </div>)
+                        }
                     </TabsContent>
                     <TabsContent value="Overview">
                         <div className='font-bold'>{course?.courseName} {course?.courseNumber}</div>
                         {course?.overview}
                     </TabsContent>
                     <TabsContent value="People">
-                        {course?.markers}
+                        {course?.users?.map(user => <div>
+                            <div>{user.name} {user.email}</div>
+                        </div>)}
                     </TabsContent>
                     <TabsContent value="WorkingHours">
-                        {course?.remainHours}
+                        {hours}
                     </TabsContent>
                 </div>
             </Tabs>
