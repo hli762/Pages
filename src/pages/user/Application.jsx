@@ -43,13 +43,13 @@ function Application(props) {
     console.log(courses);
     const colorMap = {
         ['on progress']: 'inherit',
-        success: '#16a34a',
-        fail: '#dc2626',
+        Accept: '#16a34a',
+        Declined: '#dc2626',
     }
     const processMap = {
         ['on progress']: 66,
-        success: 100,
-        fail: 0,
+        Accept: 100,
+        Declined: 0,
     }
     
     const handleApply = (id) => {
