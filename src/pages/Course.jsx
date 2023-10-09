@@ -50,7 +50,7 @@ function Course(props) {
                         <Card className="p-2 mb-6">
                             <CardTitle>Course Supervisor</CardTitle>
                             <CardContent>
-                                {courseSupervisor?.map(courseSupervisor => <div>
+                                {courseSupervisor?.map(courseSupervisor => <div key={courseSupervisor.id}>
                                     <div className='mt-2'>
                                         <div className='font-bold'>{courseSupervisor.name}</div>
                                         <div>{courseSupervisor.email}</div>
@@ -61,7 +61,7 @@ function Course(props) {
                         <Card className="p-2">
                             <CardTitle>Markers</CardTitle>
                             <CardContent>
-                                {users?.map(user => <div>
+                                {users?.map(user => <div key={user.id}>
                                     <div className='mt-2'>
                                         <div className='font-bold'>{user.name}</div>
                                         <div>{user.email}</div>
@@ -72,7 +72,7 @@ function Course(props) {
 
                     </TabsContent>
                     <TabsContent value="WorkingHours">
-                        {hours.map(hour => hour.remainHour)}
+                        {hours?.map(hour => hour.remainHour)}
                     </TabsContent>
                 </div>
             </Tabs>
