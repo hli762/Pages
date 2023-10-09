@@ -15,10 +15,10 @@ function Course(props) {
     const [courseDetail, setCourseDetail] = useState(null);
     const { id } = useParams();
     const { data: course, isLoading } = useSwr(`/GetCourseById/${id}`, fetcher)
-    const {data: assignments} = useSwr(`/GetAssignmentsByCourse/${id}`, fetcher)
-    const {data: users} = useSwr(`/GetUserByCourse/${id}`, fetcher)
-    const {data: hours} = useSwr(`/GetMarkingHoursByCourse/${id}`, fetcher)
-
+    const { data: assignments } = useSwr(`/GetAssignmentsByCourse/${id}`, fetcher)
+    const { data: users } = useSwr(`/GetUserByCourse/${id}`, fetcher)
+    const { data: courseSupervisor } = useSwr(`/GetCourseSupervisorByCourse/${id}`, fetcher)
+    const { data: hours } = useSwr(`/GetMarkingHoursByCourse/${id}`, fetcher)
     return (
         <div className='w-full'>
             <Tabs defaultValue="Overview" className="flex w-full mt-[80px]">
@@ -47,12 +47,32 @@ function Course(props) {
                         {course?.overview}
                     </TabsContent>
                     <TabsContent value="People">
-                        {course?.users?.map(user => <div>
-                            <div>{user.name} {user.email}</div>
-                        </div>)}
+                        <Card className="p-2 mb-6">
+                            <CardTitle>Course Supervisor</CardTitle>
+                            <CardContent>
+                                {courseSupervisor?.map(courseSupervisor => <div>
+                                    <div className='mt-2'>
+                                        <div className='font-bold'>{courseSupervisor.name}</div>
+                                        <div>{courseSupervisor.email}</div>
+                                    </div>
+                                </div>)}
+                            </CardContent>
+                        </Card>
+                        <Card className="p-2">
+                            <CardTitle>Markers</CardTitle>
+                            <CardContent>
+                                {users?.map(user => <div>
+                                    <div className='mt-2'>
+                                        <div className='font-bold'>{user.name}</div>
+                                        <div>{user.email}</div>
+                                    </div>
+                                </div>)}
+                            </CardContent>
+                        </Card>
+
                     </TabsContent>
                     <TabsContent value="WorkingHours">
-                        {hours}
+                        {hours.map(hour => hour.remainHour)}
                     </TabsContent>
                 </div>
             </Tabs>
