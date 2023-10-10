@@ -74,7 +74,7 @@ function Application(props) {
                     <div className={'flex w-full justify-between shadow-md p-4'}>
                         <p className={'text-lg'}>{currentCourse?.courseName} {currentCourse?.courseNumber}</p>
                         <p className={'text-lg'}>Marked {currentCourse?.enrolledStudents}/{currentCourse?.estimatedStudents}</p>
-                        <p className={'text-lg'}>Number of Application: {currentCourse?.applications?.length}</p>
+                        <p className={'text-lg'}>Number of Application: {applications?.length}</p>
                     </div>
 
                     <div>
@@ -96,7 +96,7 @@ function Application(props) {
                                 {applications?.map((application) => (
                                     <TableRow key={application.id}>
                                         <TableCell >{application.user?.name}</TableCell>
-                                        <TableCell>{application.previousGrade}</TableCell>
+                                        <TableCell>{application.previousGrade}%</TableCell>
                                         <TableCell>{application.haveMarkedBefore ? <MdRadioButtonUnchecked /> : <AiFillCheckCircle />}</TableCell>
                                         <TableCell >{application.user?.isOverseas ? 'Yes' : 'No'}</TableCell>
                                         <TableCell >{application.user?.enrolmentDetail}</TableCell>
