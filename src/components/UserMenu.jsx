@@ -44,10 +44,6 @@ export default function UserMenu() {
                 <Avatar>
                     <AvatarImage src={userPicture} alt={userName} />
                 </Avatar>
-
-                    <p className=' text-white'>
-                        {userName}
-                    </p>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
@@ -68,6 +64,9 @@ export default function UserMenu() {
 
                 </DropdownMenuContent>
             </DropdownMenu>
+            <p className=' text-white'>
+                        {userName}
+                    </p>
         </div>
     )
 }

@@ -9,6 +9,7 @@ export function getHomeUrl(role) {
   const homeUrl = {
     User: '/',
     MarkerCoordinator: '/coordinator',
+    CourseSupervisor: '/supervisor/'
   }
   return homeUrl[role] || '/'
 }
