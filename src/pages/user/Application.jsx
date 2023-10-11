@@ -28,6 +28,7 @@ import ApplyModal from "../../components/modals/ApplyModal";
 import fetcher from '../../lib/fetcher';
 import { Card } from '../../components/ui/card';
 import { getUser } from '../../lib/getUser';
+import { Input } from 'antd';
 
 
 
@@ -40,6 +41,9 @@ function Application(props) {
     const { data: courses, isLoading } = useSwr(`/GetCoursesByUser/${userId}`, fetcher)
     const { data: applications, loading } = useSwr([`/GetApplicationsByUser/${userId}`, refresh], ([url]) => fetcher(url))
     const [courseId, setCourseId] = useState(null)
+    const [searchValue, setSearchValue] = useState('');
+    const [searchCourse, setSearchCourse] = useState('');
+
     console.log(courses);
     const colorMap = {
         ['on progress']: 'inherit',
@@ -51,7 +55,7 @@ function Application(props) {
         Accept: 100,
         Declined: 0,
     }
-    
+
     const handleApply = (id) => {
         setCourseId(id)
         applyModal.onOpen()
@@ -61,18 +65,26 @@ function Application(props) {
     }
 
     const onApply = () => {
-        setRefresh(refresh+1);
+        setRefresh(refresh + 1);
     }
 
     return (
         <div className='flex justify-center relative'>
-            <ApplyModal courseId={courseId} onApply={onApply}/>
+            <ApplyModal courseId={courseId} onApply={onApply} />
             <Card className="p-2 m-2">
                 <div className='flex justify-center font-bold'>My Application</div>
+                <Input.Search
+                    // value={searchValue}
+                    placeholder='search my application'
+                    className='mt-4'
+                    onSearch={(v) => {
+                        setSearchValue(v)
+                    }}
+                />
                 <div className={'hidden md:block p-6'}>
                     <div className='mb-10'>
                         {
-                            applications?.map(application => <div className='mb-8 border-b pb-4' key={application.id}>
+                            applications?.filter(application => `${application.course?.courseName} ${application.course?.courseNumber}`.includes(searchValue))?.map(application => <div className='mb-8 border-b pb-4' key={application.id}>
                                 <div className='font-bold'>{application.course?.courseName} {application.course?.courseNumber}</div>
                                 <Progress value={processMap[application.currentStatus]} className='w-[200px] mb-2 ' />
                                 <div className='w-[200px] top-20 left-10 items-center gap-2 flex'>
@@ -92,6 +104,14 @@ function Application(props) {
 
             <Card className="p-2 m-2">
                 <div className='flex justify-center font-bold'>My Courses</div>
+                <Input.Search
+                    // value={searchValue}
+                    placeholder='search my course'
+                    className='mt-4 w-80'
+                    onSearch={(v) => {
+                        setSearchCourse(v)
+                    }}
+                />
                 <div className={'p-6 w-[800px]'}>
                     <Table>
                         {/* <TableCaption>A list of your recent assignments.</TableCaption> */}
@@ -104,7 +124,7 @@ function Application(props) {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {courses?.map((course) => (
+                            {courses?.filter(course => `${course.courseName} ${course.courseNumber}`.includes(searchCourse))?.map((course) => (
                                 <TableRow key={course.id}>
                                     <TableCell >{course.courseName} {course.courseNumber}</TableCell>
                                     <TableCell>{course.enrolledStudents}/{course.estimatedStudents}</TableCell>
@@ -132,8 +152,8 @@ function Application(props) {
                                         }
                                     </TableCell>
                                     <TableCell >
-                                        <Button disabled={course.enrolledStudents >= course.estimatedStudents} onClick={() => {handleApply(course.id); onApply();}}>
-                                            {course.enrolledStudents >= course.estimatedStudents ? 'Full' : 'Apply'}
+                                        <Button disabled={!course.needsMarker} onClick={() => { handleApply(course.id); onApply(); }}>
+                                            {!course.needsMarker ? 'Full' : 'Apply'}
                                         </Button>
                                     </TableCell>
                                 </TableRow>
