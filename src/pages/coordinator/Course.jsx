@@ -23,6 +23,7 @@ import request from '../../lib/request';
 import { useToast } from "../../components/ui/use-toast"
 import { getSemesterId } from '../../lib/utils';
 import { useNavigate } from 'react-router-dom';
+import { Input } from 'antd';
 
 
 function Courses(props) {
@@ -36,6 +37,8 @@ function Courses(props) {
     const editCourseModal = useEditCourseModal()
     const createCourseModal = useCreateCourseModal()
     const { toast } = useToast()
+    const [searchCourse, setSearchCourse] = useState('');
+
 
     const onDelete = async () => {
         await request.post('deleteCourseById', {
@@ -50,12 +53,12 @@ function Courses(props) {
     }
 
     useEffect(() => {
-        if(!semesterId) {
+        if (!semesterId) {
             navigate('/coordinator')
         }
     }, [semesterId])
 
-    if(!semesterId) {
+    if (!semesterId) {
         return null;
     }
 
@@ -65,11 +68,18 @@ function Courses(props) {
 
     return (
         <div className='p-6'>
-            <EditCourseModal id={editId} onSuccess={onSuccess}/>
+            <EditCourseModal id={editId} onSuccess={onSuccess} />
             <CreateCourseModal />
-            <Button className="mt-6" onClick={() => { createCourseModal.onOpen() }}>
-                Add Course
-            </Button>
+            <div className='flex items-center my-6'>
+                <Button className="w-40 mr-4" onClick={() => { createCourseModal.onOpen() }}>
+                    Add Course
+                </Button>
+                <Input.Search
+                    onSearch={v => setSearchCourse(v)}
+                    className='w-80'
+                    placeholder='search course'
+                />
+            </div>
             <Table className="mt-6">
                 <TableHeader>
                     <TableRow>
@@ -80,7 +90,7 @@ function Courses(props) {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {courses.map((course) => (
+                    {(courses || [])?.filter(course => `${course.courseName} ${course.courseNumber}`.toLowerCase()?.includes(searchCourse.toLowerCase())).map((course) => (
                         <TableRow key={course.id}>
                             <TableCell className="font-medium">
                                 {course.courseName} {course.courseNumber}
