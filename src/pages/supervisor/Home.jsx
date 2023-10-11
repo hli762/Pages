@@ -15,7 +15,7 @@ function Home(props) {
     const navigate = useNavigate()
     const { userType } = getUser()
     const cacheSemesterId = getSemesterId();
-    const { data: semesters, isLoading } = useSwr('/GetAllSemesters', fetcher)
+    const { data: semesters, isLoading } = useSwr('/GetAllSemesters/1', fetcher)
     const [currentSemester, setCurrentSemester] = useState(cacheSemesterId && +cacheSemesterId)
 
     const filterOption = (input, option) =>

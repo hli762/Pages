@@ -19,7 +19,7 @@ function Home(props) {
     const navigate = useNavigate()
     const { userType } = getUser()
     const cacheSemesterId = getSemesterId();
-    const { data: semesters, isLoading } = useSwr('/GetAllSemesters', fetcher)
+    const { data: semesters, isLoading } = useSwr('/GetAllSemesters/1', fetcher)
     const [showAddNewSemester, setShowNewSemester] = useState(false);
     const [inputYear, setInputYear] = useState();
     const [inputSemester, setInputSemester] = useState();
