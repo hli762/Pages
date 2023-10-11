@@ -7,12 +7,13 @@ import { getUser } from '../../lib/getUser';
 import { useNavigate } from 'react-router-dom';
 import useSwr from "swr";
 import fetcher from '../../lib/fetcher';
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectGroup, SelectLabel, SelectItem } from '../../components/ui/select';
+// import { Select, SelectTrigger, SelectValue, SelectContent, SelectGroup, SelectLabel, SelectItem } from '../../components/ui/select';
 import { getSemesterId } from '../../lib/utils';
 import Modal from '../../components/Modal';
 import { Input } from '../../components/ui/input';
 import request from '../../lib/request';
 import toast from 'react-hot-toast';
+import {Select} from 'antd'
 
 function Home(props) {
     const navigate = useNavigate()
@@ -44,6 +45,10 @@ function Home(props) {
         }
     }
 
+    const filterOption = (input, option) =>
+  (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
+
+
     useEffect(() => {
         if (userType === 'User') {
             navigate('/')
@@ -58,7 +63,7 @@ function Home(props) {
         <div className={'h-screen flex flex-col gap-10 items-center justify-center'}>
             <Button onClick={() => setShowNewSemester(true)}>Add New Semester</Button>
             <span className='text-xl'>Please select semester</span>
-            <Select defaultValue={currentSemester} onValueChange={(value) => { setCurrentSemester(value) }}
+            {/* <Select defaultValue={currentSemester} onValueChange={(value) => { setCurrentSemester(value) }}
             >
                 <SelectTrigger className="w-[180px]">
                     <SelectValue className='text-black' placeholder="Select a semester" />
@@ -70,7 +75,20 @@ function Home(props) {
                         }
                     </SelectGroup>
                 </SelectContent>
-            </Select>
+            </Select> */}
+            <Select 
+                showSearch
+                value={currentSemester}
+                onChange={(value) => { setCurrentSemester(value) }}
+                filterOption={filterOption}
+                placeholder="Select a semester"
+                options={semesters?.map(semester => {
+                    return {
+                        value: semester.id,
+                        label: `${semester.semesterType}, ${semester.year}`
+                    }
+                })}
+            />
             <div className={`flex flex-col gap-10 items-center justify-center ${!currentSemester && 'hidden'}`}>
 
                 <Link to={'/coordinator/application'}>
