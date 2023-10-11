@@ -27,10 +27,11 @@ import { toast } from 'react-hot-toast'
 import fetcher from '../../lib/fetcher'
 import { Label } from "../../components/ui/label"
 import { getUser } from '../../lib/getUser'
+import { useParams } from 'react-router-dom'
 
 const Home = () => {
-
-    const { userId } = getUser()
+    const { id } = useParams();
+    const { userId } = getUser() || id;
     const navigate = useNavigate()
     const { data: user } = useSwr(`/GetUserById/${userId}`, fetcher)
 
@@ -111,6 +112,7 @@ const Home = () => {
                     <FormField
                         control={form.control}
                         name="name"
+                        disabled={!!id}
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>name</FormLabel>
@@ -124,6 +126,7 @@ const Home = () => {
                     <FormField
                         control={form.control}
                         name="upi"
+                        disabled={!!id}
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>UPI:</FormLabel>
@@ -138,6 +141,7 @@ const Home = () => {
                         disabled
                         control={form.control}
                         name="email"
+                        disabled={!!id}
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>EMAIL:</FormLabel>
@@ -151,6 +155,7 @@ const Home = () => {
                     <FormField
                         control={form.control}
                         name="auid"
+                        disabled={!!id}
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Your AUID:</FormLabel>
@@ -165,6 +170,7 @@ const Home = () => {
                     <FormField
                         control={form.control}
                         name="isOverseas"
+                        disabled={!!id}
                         render={({ field }) => (
                             <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
                                 <FormControl>
@@ -188,6 +194,7 @@ const Home = () => {
                     <FormField
                         control={form.control}
                         name="isCitizenOrPermanent"
+                        disabled={!!id}
                         render={({ field }) => (
                             <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
                                 <FormControl>
@@ -211,6 +218,7 @@ const Home = () => {
                     <FormField
                         control={form.control}
                         name="enrolmentDetail"
+                        disabled={!!id}
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Enrolment details for the semester (degree / year - e.g. 2nd year BSc, 1st year PhD, etc.):</FormLabel>
@@ -225,6 +233,7 @@ const Home = () => {
                     <FormField
                         control={form.control}
                         name="underOrPost"
+                        disabled={!!id}
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Undergraduate or postgraduate student(u or p) (add note that “postgraduate” means that student has already completed a degree):</FormLabel>
@@ -240,6 +249,7 @@ const Home = () => {
                     <FormField
                         control={form.control}
                         name="haveOtherContracts"
+                        disabled={!!id}
                         render={({ field }) => (
                             <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
                                 <FormControl>
@@ -262,6 +272,7 @@ const Home = () => {
                     <FormField
                         control={form.control}
                         name="cv"
+                        disabled={!!id}
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Please upload your CV:</FormLabel>
@@ -273,7 +284,7 @@ const Home = () => {
                             </FormItem>
                         )}
                     />
-                    <a className='text-sm'
+                    <a className='text-sm cursor-pointer'
                         onClick={() => {
                             window.open(`${baseUrl}/${user?.id}/cv`)
                         }}>My CV</a>
@@ -281,6 +292,7 @@ const Home = () => {
                     <FormField
                         control={form.control}
                         name="academicRecord"
+                        disabled={!!id}
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Please upload your academic record:</FormLabel>
@@ -292,14 +304,14 @@ const Home = () => {
                             </FormItem>
                         )}
                     />
-                    <a className='text-sm'
+                    <a className='text-sm cursor-pointer'
                         onClick={() => {
                             window.open(`${baseUrl}/${user?.id}/academic-record`)
                         }}>My Academic Record</a>
 
-                    <div className='flex justify-end'>
+                    {!id && <div className='flex justify-end'>
                         <Button type="submit">Submit</Button>
-                    </div>
+                    </div>}
                 </form>
             </Form>
         </div>

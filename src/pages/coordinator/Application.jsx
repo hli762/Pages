@@ -14,9 +14,10 @@ import useSwr from "swr";
 import fetcher from '../../lib/fetcher';
 import { Button } from '../../components/ui/button';
 import { getSemesterId } from '../../lib/utils';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { baseUrl } from '../../lib/fetcher';
 import request from '../../lib/request';
+import { Input, Radio } from 'antd';
 
 function Application(props) {
     const semesterId = getSemesterId();
@@ -26,9 +27,13 @@ function Application(props) {
     const [currentCourseId, setCurrentCourseId] = useState();
     const [currentCourse, setCurrentCourse] = useState();
 
+    const [searchCourse, setSearchCourse] = useState('');
+    const [searchApplication, setSearchApplication] = useState('');
+    const [rank, setRank] = useState('1');
+
     const { data: courses, isLoading } = useSwr(['/GetCoursesBySemster', semesterId], ([url, semesterId]) => semesterId && fetcher(`${url}/${semesterId}`))
 
-    const { data: applications } = useSwr(['/GetApplicationsByCourse', currentCourseId, refresh], ([url, id]) => id && fetcher(`${url}/${id}`))
+    const { data: applications } = useSwr(['/GetApplicationsByCourse', currentCourseId, rank, refresh], ([url, id]) => id && fetcher(`${url}/${id}/${rank}`))
 
     const setApplicationStatus = async (Applicationid, currentStatus) => {
         // status: in Progress || Accept || Declined
@@ -50,9 +55,14 @@ function Application(props) {
     return (
         <div className={'flex'}>
             <div className={'basis-1/6 border-r-[1px] border-black h-screen flex flex-col p-8 overflow-y-auto'}>
+                <Input.Search
+                    onSearch={v => setSearchCourse(v)}
+                    className='mb-6'
+                    placeholder='search course'
+                />
 
                 {
-                    (courses || []).map(i => <div
+                    (courses || [])?.filter(course => `${course.courseName} ${course.courseNumber}`.toLowerCase()?.includes(searchCourse.toLowerCase())).map(i => <div
                         onClick={() => {
                             setCurrentCourseId(i.id);
                             setCurrentCourse(i)
@@ -71,6 +81,21 @@ function Application(props) {
                     <h4 className={'text-3xl'}>
                         Applications
                     </h4>
+                    <div className='flex items-center'>
+                        <div className='flex justify-center'>
+                            <div className='mr-2'>Rank By</div>
+                            <Radio.Group value={rank} onChange={e => setRank(e.target.value)}>
+                                <Radio value="1">Have Marked</Radio>
+                                <Radio value="2">Previous Grade</Radio>
+                                <Radio value="3">Enrolment Detail</Radio>
+                            </Radio.Group>
+                        </div>
+                        <Input.Search
+                            onSearch={v => setSearchApplication(v)}
+                            className='mb-6 mt-6 w-80 ml-8'
+                            placeholder='search application'
+                        />
+                    </div>
                     <div className={'flex w-full justify-between shadow-md p-4'}>
                         <p className={'text-lg'}>{currentCourse?.courseName} {currentCourse?.courseNumber}</p>
                         <p className={'text-lg'}>Marked {currentCourse?.enrolledStudents}/{currentCourse?.estimatedStudents}</p>
@@ -93,9 +118,11 @@ function Application(props) {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {applications?.map((application) => (
+                                {applications?.filter(application => `${application?.user?.name}`.toLowerCase()?.includes(searchApplication.toLowerCase()))?.map((application) => (
                                     <TableRow key={application.id}>
-                                        <TableCell >{application.user?.name}</TableCell>
+                                        <TableCell >
+                                            <Link to={`/beMarker/${application.user?.id}`} className='underline'>{application.user?.name}</Link>
+                                        </TableCell>
                                         <TableCell>{application.previousGrade}%</TableCell>
                                         <TableCell>{application.haveMarkedBefore ? <MdRadioButtonUnchecked /> : <AiFillCheckCircle />}</TableCell>
                                         <TableCell >{application.user?.isOverseas ? 'Yes' : 'No'}</TableCell>
@@ -104,7 +131,7 @@ function Application(props) {
                                         <TableCell>{application.isRecommanded ? <AiFillCheckCircle /> : <MdRadioButtonUnchecked />}</TableCell>
                                         <TableCell>
                                             <Button
-                                                className="mb-2"
+                                                className="mb-2 mr-2"
                                                 onClick={() => {
                                                     window.open(`${baseUrl}/${application.user?.id}/cv`)
                                                 }}
@@ -119,7 +146,7 @@ function Application(props) {
                                             {
                                                 (application.currentStatus !== 'Accept' && application.currentStatus !== 'Declined') && <>
                                                     <Button
-                                                        className="mb-2"
+                                                        className="mb-2 mr-2"
                                                         onClick={() => {
                                                             setApplicationStatus(application.id, 'Accept')
                                                         }}

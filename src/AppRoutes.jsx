@@ -61,6 +61,10 @@ const AppRoutes = [
     element: <CoordinatorCourse/>
   },
   {
+    path:'/beMarker/:id',
+    element:<Home/>
+  },
+  {
     path:'/beMarker',
     element:<Home/>
   }

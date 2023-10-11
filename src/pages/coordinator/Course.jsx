@@ -75,7 +75,7 @@ function Courses(props) {
                     <TableRow>
                         <TableHead>Course Name</TableHead>
                         <TableHead>Course Marker</TableHead>
-                        <TableHead>Course Coordinator</TableHead>
+                        <TableHead>Course Director</TableHead>
                         <TableHead className="text-right"></TableHead>
                     </TableRow>
                 </TableHeader>
@@ -86,7 +86,7 @@ function Courses(props) {
                                 {course.courseName} {course.courseNumber}
                             </TableCell>
                             <TableCell>{`${course.enrolledStudents}/${course.estimatedStudents}`}</TableCell>
-                            <TableCell>{course.courseSupervisors?.map(i => i.name)?.join(', ')}</TableCell>
+                            <TableCell>{course.courseSupervisors?.find(i => i.isDirector)?.name}</TableCell>
                             <TableCell className="text-right">
                                 <Link to={`/course/${course.id}`}>
                                     <Button className="mr-2">View</Button>
