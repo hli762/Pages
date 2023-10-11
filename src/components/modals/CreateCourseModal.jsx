@@ -1,6 +1,5 @@
 
 import React, { useCallback, useState } from 'react'
-import { useToast } from "../ui/use-toast"
 import Modal from '../Modal'
 import { Input } from "../ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
@@ -12,6 +11,7 @@ import useCreateCourseModal from '../../hooks/useCreateCourseModal';
 import request from '../../lib/request';
 import { Checkbox } from '../ui/checkbox';
 import { getSemesterId } from '../../lib/utils';
+import toast from 'react-hot-toast';
 
 
 const formSchema = z.object({
@@ -22,13 +22,11 @@ const formSchema = z.object({
 
 
 function CreateCourseModal() {
-    const { toast } = useToast()
     const [isLoading, setIsLoading] = useState(false)
     const createCourseModal = useCreateCourseModal()
     const onSubmit = useCallback(async () => {
         try {
             const data = form.getValues();
-            console.log(data)
             await request.post('NewCourse', {
                 semesterID: getSemesterId(),
                 ...data,
@@ -36,10 +34,7 @@ function CreateCourseModal() {
             toast.success("submit sucessfully! 🚀🚀🚀")
             createCourseModal.onClose();
         } catch (e) {
-            toast({
-                title: "error",
-                description: "Something went wrong ",
-            })
+            toast.error('Something went wrong')
         }
     }
     )
@@ -88,6 +83,19 @@ function CreateCourseModal() {
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel className={'text-white'}>courseCoordinatorEmail</FormLabel>
+                                <FormControl>
+                                    <Input value={field.value} onChange={field.onChange} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name={`courseDirectorEmail`} // Use a unique name for each field
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel className={'text-white'}>courseDirectorEmail</FormLabel>
                                 <FormControl>
                                     <Input value={field.value} onChange={field.onChange} />
                                 </FormControl>
