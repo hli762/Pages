@@ -32,8 +32,8 @@ import Loading from '../../components/Loading';
 
 function Course(props) {
     const [showCard, setShowCard] = useState(true)
-    const { data: courses, isLoading } = useSwr('/GetAllCourses', fetcher)
-
+    const {userId} = getUser();
+    const { data: courses, isLoading } = useSwr(`/GetCoursesByUser/${userId}`, fetcher)
     const navigate = useNavigate();
     const createCourseModal = useCreateCourseModal()
     const { userType } = getUser()
