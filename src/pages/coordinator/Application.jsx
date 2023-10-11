@@ -41,6 +41,10 @@ function Application(props) {
         setRefresh(refresh + 1)
     }
 
+    const addUserToCousrse = async (userId, courseId) => {
+        await request.post(`/AddUserToCourse/${userId}/${courseId}`);
+        setRefresh(refresh + 1)
+    }
     useEffect(() => {
         setCurrentCourseId(courses?.[0]?.id)
         setCurrentCourse(courses?.[0])
@@ -149,6 +153,7 @@ function Application(props) {
                                                         className="mb-2 mr-2"
                                                         onClick={() => {
                                                             setApplicationStatus(application.id, 'Accept')
+                                                            addUserToCousrse(application.id, currentCourseId)
                                                         }}
                                                     >Accept</Button>
                                                     <Button
