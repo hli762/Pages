@@ -31,14 +31,14 @@ import { useParams } from 'react-router-dom'
 
 const Home = () => {
     const { id } = useParams();
-    const { userId } = getUser() || id;
+    const userId = id || getUser()?.userId
     const navigate = useNavigate()
     const { data: user } = useSwr(`/GetUserById/${userId}`, fetcher)
 
     useEffect(() => {
-        if (user?.cv) {
-            navigate('/course')
-        }
+        // if (user?.cv) {
+        //     navigate('/course')
+        // }
 
     }, [user])
 
@@ -46,20 +46,20 @@ const Home = () => {
     const [record, setRecord] = useState(null);
 
     const form = useForm({
-        resolver: zodResolver(userFormSchama),
-        defaultValues: {
-            name: 'bob',
-            upi: '',
-            email: '@aucklanduni.ac.nz',
-            auid: '',
-            isOverseas: false,
-            isCitizenOrPermanent: false,
-            enrolmentDetail: 'master', // 设置 enrolmentDetail 字段的默认值
-            underOrPost: 'under', // 设置 underOrPost 字段的默认值
-            haveOtherContracts: false, // 设置 haveOtherContracts 字段的默认值为 true
-            cv: '', // 设置 cv 字段的默认值为空字符串
-            academicRecord: '', // 设置 academicRecord 字段的默认值为空字符串
-        },
+        // resolver: zodResolver(userFormSchama),
+        // defaultValues: {
+        //     name: 'bob',
+        //     upi: '',
+        //     email: '@aucklanduni.ac.nz',
+        //     auid: '',
+        //     isOverseas: false,
+        //     isCitizenOrPermanent: false,
+        //     enrolmentDetail: 'master', // 设置 enrolmentDetail 字段的默认值
+        //     underOrPost: 'under', // 设置 underOrPost 字段的默认值
+        //     haveOtherContracts: false, // 设置 haveOtherContracts 字段的默认值为 true
+        //     cv: '', // 设置 cv 字段的默认值为空字符串
+        //     academicRecord: '', // 设置 academicRecord 字段的默认值为空字符串
+        // },
         values: {
             ...user,
         }
@@ -67,25 +67,51 @@ const Home = () => {
 
     const onSubmit = async (data) => {
         try {
+            const {
+                name,
+                upi,
+                email,
+                auid,
+                isOverseas,
+                isCitizenOrPermanent,
+                enrolmentDetail,
+                underOrPost,
+                haveOtherContracts,
+            } = data || {};
+
+            if(
+                !name ||
+                !upi ||
+                !email ||
+                !auid ||
+                !isOverseas ||
+                !isCitizenOrPermanent ||
+                !enrolmentDetail ||
+                !underOrPost ||
+                !haveOtherContracts
+            ) {
+                toast.error('Please fill all form field')
+                return;
+            }
             const formData = new FormData();
 
-            formData.append("userID", userId);
-            formData.append("name", data.name);
-            formData.append("upi", data.upi);
-            formData.append("email", data.email);
-            formData.append("auid", data.auid);
-            formData.append("isOverseas", data.isOverseas);
-            formData.append("isCitizenOrPermanent", data.isCitizenOrPermanent);
-            formData.append("enrolmentDetail", data.enrolmentDetail);
-            formData.append("underOrPost", data.underOrPost);
-            formData.append("haveOtherContracts", data.haveOtherContracts);
+            formData.append("Id", userId);
+            formData.append("Name", name);
+            formData.append("UPI", upi);
+            formData.append("Email", email);
+            formData.append("AUID", auid);
+            formData.append("isOverseas", isOverseas);
+            formData.append("isCitizenOrPermanent", isCitizenOrPermanent);
+            formData.append("enrolmentDetail", enrolmentDetail);
+            formData.append("UnderOrPost", underOrPost);
+            formData.append("haveOtherContracts", haveOtherContracts);
 
 
-            formData.append("cv", cv); // Assuming data.cv is a FileList
-            formData.append("academicRecord", record); // Assuming data.academicRecord is a FileList
+            formData.append("CV", cv); // Assuming data.cv is a FileList
+            formData.append("AcademicRecord", record); // Assuming data.academicRecord is a FileList
 
 
-            await request.post("/AddUser", formData, {
+            await request.post("/UpdateUser", formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 }
@@ -141,7 +167,6 @@ const Home = () => {
                         disabled
                         control={form.control}
                         name="email"
-                        disabled={!!id}
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>EMAIL:</FormLabel>
@@ -236,7 +261,7 @@ const Home = () => {
                         disabled={!!id}
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Undergraduate or postgraduate student(u or p) (add note that “postgraduate” means that student has already completed a degree):</FormLabel>
+                                <FormLabel>Undergraduate or postgraduate student(under or post) (add note that “postgraduate” means that student has already completed a degree):</FormLabel>
                                 <FormControl>
                                     <Input type="text" {...field} />
                                 </FormControl>
@@ -278,13 +303,13 @@ const Home = () => {
                                 <FormLabel>Please upload your CV:</FormLabel>
                                 <Label htmlFor="cv" className=" text-neutral-500"> {cv?.name}</Label>
                                 <FormControl>
-                                    <Input id="cv" type="file" {...field} onChange={(e) => handleCvChange(e)} />
+                                    <Input id="cv" type="file" {...field} value={cv} onChange={(e) => handleCvChange(e)} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
                         )}
                     />
-                    <a className='text-sm cursor-pointer'
+                    <a className={`text-sm cursor-pointer ${!user?.cv && 'hidden'}`}
                         onClick={() => {
                             window.open(`${baseUrl}/${user?.id}/cv`)
                         }}>My CV</a>
@@ -298,13 +323,13 @@ const Home = () => {
                                 <FormLabel>Please upload your academic record:</FormLabel>
                                 <Label htmlFor="record" className=" text-neutral-500">{record?.name}</Label>
                                 <FormControl>
-                                    <Input id="record" type="file" {...field} onChange={(e) => handleRecordChange(e)} />
+                                    <Input id="record" type="file" {...field} value={record} onChange={(e) => handleRecordChange(e)} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
                         )}
                     />
-                    <a className='text-sm cursor-pointer'
+                    <a className={`text-sm cursor-pointer ${!user?.academicRecord && 'hidden'}`}
                         onClick={() => {
                             window.open(`${baseUrl}/${user?.id}/academic-record`)
                         }}>My Academic Record</a>
