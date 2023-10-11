@@ -38,7 +38,7 @@ function Application(props) {
     const applyModal = useApplyModal()
     const [refresh, setRefresh] = useState(0)
     const userId = getUser()?.userId
-    const { data: courses, isLoading } = useSwr(`/GetCoursesByUser/${userId}`, fetcher)
+    const { data: courses, isLoading } = useSwr(`/GetAllCourses`, fetcher)
     const { data: applications, loading } = useSwr([`/GetApplicationsByUser/${userId}`, refresh], ([url]) => fetcher(url))
     const [courseId, setCourseId] = useState(null)
     const [searchValue, setSearchValue] = useState('');
@@ -103,7 +103,7 @@ function Application(props) {
             </Card>
 
             <Card className="p-2 m-2">
-                <div className='flex justify-center font-bold'>My Courses</div>
+                <div className='flex justify-center font-bold'>Courses</div>
                 <Input.Search
                     // value={searchValue}
                     placeholder='search my course'
