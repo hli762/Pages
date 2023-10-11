@@ -132,7 +132,7 @@ function Application(props) {
                                     <TableRow key={application.id}>
                                         <TableCell >{application.user?.name}</TableCell>
                                         <TableCell>{application.previousGrade}%</TableCell>
-                                        <TableCell>{application.haveMarkedBefore ? <MdRadioButtonUnchecked /> : <AiFillCheckCircle />}</TableCell>
+                                        <TableCell>{application.haveMarkedBefore ? <AiFillCheckCircle /> : <MdRadioButtonUnchecked /> }</TableCell>
                                         <TableCell >{application.user?.isOverseas ? 'Yes' : 'No'}</TableCell>
                                         <TableCell >{application.user?.enrolmentDetail}</TableCell>
                                         <TableCell>{application.user?.remainHours}</TableCell>

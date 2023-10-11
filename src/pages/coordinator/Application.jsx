@@ -124,7 +124,7 @@ function Application(props) {
                                             <Link to={`/beMarker/${application.user?.id}`} className='underline'>{application.user?.name}</Link>
                                         </TableCell>
                                         <TableCell>{application.previousGrade}%</TableCell>
-                                        <TableCell>{application.haveMarkedBefore ? <MdRadioButtonUnchecked /> : <AiFillCheckCircle />}</TableCell>
+                                        <TableCell>{application.haveMarkedBefore ? <AiFillCheckCircle /> : <MdRadioButtonUnchecked />}</TableCell>
                                         <TableCell >{application.user?.isOverseas ? 'Yes' : 'No'}</TableCell>
                                         <TableCell >{application.user?.enrolmentDetail}</TableCell>
                                         <TableCell>{application.user?.remainHours}</TableCell>
