@@ -163,7 +163,12 @@ function Course(props) {
                         </Card>
 
                     </TabsContent>
-                    <TabsContent value="WorkingHours" className="grid grid-cols-1 md:grid-cols-2 lg:md:grid-cols-3 gap-4">
+                    <TabsContent value="WorkingHours" className="">
+                        <div className='font-bold mb-6 flex'>
+                            <div className='mr-6'>Total Working Hours: {course?.totalMarkingHour}</div>
+                            <div>Avarage Working Hours: {hours?.length ? (course?.totalMarkingHour / hours?.length).toFixed(2) : '-'}</div>
+                        </div>
+                        <div className='grid grid-cols-1 md:grid-cols-2 lg:md:grid-cols-3 gap-4'>
                         {hours?.map(hour => <Card className="pt-6 mb-6">
                             <CardContent>
                             <div className='font-bold'>name: {hour.user?.name}</div>
@@ -171,6 +176,7 @@ function Course(props) {
                             <div className='font-bold'>hours: {hour.remainHour}</div>
                             </CardContent>
                         </Card>)}
+                        </div>
                     </TabsContent>
                 </div>
             </Tabs>
