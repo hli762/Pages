@@ -29,7 +29,7 @@ function Application(props) {
             </h4>
             <div className={'flex w-full justify-between shadow-md p-4'}>
                 <p className={'text-lg'}>{currentCourse?.courseName} {currentCourse?.courseNumber}</p>
-                <p className={'text-lg'}>Marked {currentCourse?.enrolledStudents}/{currentCourse?.estimatedStudents}</p>
+                <p className={'text-lg'}>Markers {currentCourse?.enrolledStudents}/{currentCourse?.estimatedStudents}</p>
                 <p className={'text-lg'}>Number of Application: {applications?.length}</p>
             </div>
 
