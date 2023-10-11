@@ -31,7 +31,7 @@ function Application(props) {
     const [searchApplication, setSearchApplication] = useState('');
     const [rank, setRank] = useState('1');
 
-    const { data: courses, isLoading } = useSwr(['/GetCoursesBySemster', semesterId], ([url, semesterId]) => semesterId && fetcher(`${url}/${semesterId}`))
+    const { data: courses, isLoading } = useSwr(['/GetCoursesBySemster', semesterId, refresh], ([url, semesterId]) => semesterId && fetcher(`${url}/${semesterId}`))
 
     const { data: applications } = useSwr(['/GetApplicationsByCourse', currentCourseId, rank, refresh], ([url, id]) => id && fetcher(`${url}/${id}/${rank}`))
 
