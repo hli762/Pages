@@ -1,22 +1,23 @@
-import React, { useEffect,useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import { useForm } from "react-hook-form"
-import {Button} from '../../components/ui/button'
+import { Button } from '../../components/ui/button'
 import { Progress } from '../../components/ui/progress'
 import { Checkbox } from '../../components/ui/checkbox'
 
 import { userFormSchama } from '../../constant/applicationForm'
 
+import { baseUrl } from '../../lib/fetcher';
 
 import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
 } from '../../components/ui/form'
 import { Input } from '../../components/ui/input'
 import request from '../../lib/request'
@@ -28,17 +29,17 @@ import { Label } from "../../components/ui/label"
 import { getUser } from '../../lib/getUser'
 
 const Home = () => {
-    
-    const {userId} = getUser()
+
+    const { userId } = getUser()
     const navigate = useNavigate()
-    const {data:user} = useSwr(`/GetUserById/${userId}`,fetcher)
-   
-    useEffect(()=>{
-        if(user?.cv){
+    const { data: user } = useSwr(`/GetUserById/${userId}`, fetcher)
+
+    useEffect(() => {
+        if (user?.cv) {
             navigate('/course')
         }
-     
-    },[user])
+
+    }, [user])
 
     const [cv, setCv] = useState(null);
     const [record, setRecord] = useState(null);
@@ -47,23 +48,26 @@ const Home = () => {
         resolver: zodResolver(userFormSchama),
         defaultValues: {
             name: 'bob',
-            upi: '', 
-            email: '@aucklanduni.ac.nz', 
-            auid: '', 
-            isOverseas: false, 
-            isCitizenOrPermanent: false, 
+            upi: '',
+            email: '@aucklanduni.ac.nz',
+            auid: '',
+            isOverseas: false,
+            isCitizenOrPermanent: false,
             enrolmentDetail: 'master', // 设置 enrolmentDetail 字段的默认值
             underOrPost: 'under', // 设置 underOrPost 字段的默认值
             haveOtherContracts: false, // 设置 haveOtherContracts 字段的默认值为 true
             cv: '', // 设置 cv 字段的默认值为空字符串
             academicRecord: '', // 设置 academicRecord 字段的默认值为空字符串
-          },
-      })
+        },
+        values: {
+            ...user,
+        }
+    })
 
-      const onSubmit = async (data) => {
+    const onSubmit = async (data) => {
         try {
             const formData = new FormData();
-        
+
             formData.append("userID", userId);
             formData.append("name", data.name);
             formData.append("upi", data.upi);
@@ -74,31 +78,31 @@ const Home = () => {
             formData.append("enrolmentDetail", data.enrolmentDetail);
             formData.append("underOrPost", data.underOrPost);
             formData.append("haveOtherContracts", data.haveOtherContracts);
-        
-            
+
+
             formData.append("cv", cv); // Assuming data.cv is a FileList
             formData.append("academicRecord", record); // Assuming data.academicRecord is a FileList
-                
-        
-            await request.post("/AddUser",formData,  {
-                    headers: {
+
+
+            await request.post("/AddUser", formData, {
+                headers: {
                     'Content-Type': 'multipart/form-data',
-                    }
-                });
-        
+                }
+            });
+
             toast.success("Uploaded successfully 🚀🚀🚀");
         } catch (e) {
-          toast.error(e.message);
+            toast.error(e.message);
         }
-      };
+    };
 
-      const handleCvChange = (e) => {
+    const handleCvChange = (e) => {
         setCv(e.target.files[0]);
-      };
-      const handleRecordChange = (e) => {
+    };
+    const handleRecordChange = (e) => {
         setRecord(e.target.files[0]);
-     
-      };
+
+    };
 
     return (
         <div className='flex justify-center relative'>
@@ -109,11 +113,11 @@ const Home = () => {
                         name="name"
                         render={({ field }) => (
                             <FormItem>
-                            <FormLabel>name</FormLabel>
-                            <FormControl>
-                                <Input type="text" {...field} />
-                            </FormControl>
-                            <FormMessage />
+                                <FormLabel>name</FormLabel>
+                                <FormControl>
+                                    <Input type="text" {...field} />
+                                </FormControl>
+                                <FormMessage />
                             </FormItem>
                         )}
                     />
@@ -122,24 +126,25 @@ const Home = () => {
                         name="upi"
                         render={({ field }) => (
                             <FormItem>
-                            <FormLabel>UPI:</FormLabel>
-                            <FormControl>
-                                <Input type="text" {...field} />
-                            </FormControl>
-                            <FormMessage />
+                                <FormLabel>UPI:</FormLabel>
+                                <FormControl>
+                                    <Input type="text" {...field} />
+                                </FormControl>
+                                <FormMessage />
                             </FormItem>
                         )}
                     />
                     <FormField
+                        disabled
                         control={form.control}
                         name="email"
                         render={({ field }) => (
                             <FormItem>
-                            <FormLabel>PREFERRED EMAIL:</FormLabel>
-                            <FormControl>
-                                <Input type="email" {...field} />
-                            </FormControl>
-                            <FormMessage />
+                                <FormLabel>EMAIL:</FormLabel>
+                                <FormControl>
+                                    <Input type="email" {...field} />
+                                </FormControl>
+                                <FormMessage />
                             </FormItem>
                         )}
                     />
@@ -148,11 +153,11 @@ const Home = () => {
                         name="auid"
                         render={({ field }) => (
                             <FormItem>
-                            <FormLabel>Your AUID:</FormLabel>
-                            <FormControl>
-                                <Input type="text" {...field} />
-                            </FormControl>
-                            <FormMessage />
+                                <FormLabel>Your AUID:</FormLabel>
+                                <FormControl>
+                                    <Input type="text" {...field} />
+                                </FormControl>
+                                <FormMessage />
                             </FormItem>
                         )}
                     />
@@ -164,13 +169,13 @@ const Home = () => {
                             <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
                                 <FormControl>
                                     <Checkbox
-                                    checked={field.value}
-                                    onCheckedChange={field.onChange}
+                                        checked={field.value}
+                                        onCheckedChange={field.onChange}
                                     />
                                 </FormControl>
                                 <div className="space-y-1 leading-none">
                                     <FormLabel>
-                                    Overseas?
+                                        Overseas?
                                     </FormLabel>
                                     <FormDescription>
                                         Currently overseas (y/n) – if yes, will come arrive back in NZ?
@@ -187,8 +192,8 @@ const Home = () => {
                             <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
                                 <FormControl>
                                     <Checkbox
-                                    checked={field.value}
-                                    onCheckedChange={field.onChange}
+                                        checked={field.value}
+                                        onCheckedChange={field.onChange}
                                     />
                                 </FormControl>
                                 <div className="space-y-1 leading-none">
@@ -208,11 +213,11 @@ const Home = () => {
                         name="enrolmentDetail"
                         render={({ field }) => (
                             <FormItem>
-                            <FormLabel>Enrolment details for the semester (degree / year - e.g. 2nd year BSc, 1st year PhD, etc.):</FormLabel>
-                            <FormControl>
-                                <Input type="text" {...field} />
-                            </FormControl>
-                            <FormMessage />
+                                <FormLabel>Enrolment details for the semester (degree / year - e.g. 2nd year BSc, 1st year PhD, etc.):</FormLabel>
+                                <FormControl>
+                                    <Input type="text" {...field} />
+                                </FormControl>
+                                <FormMessage />
                             </FormItem>
                         )}
                     />
@@ -222,11 +227,11 @@ const Home = () => {
                         name="underOrPost"
                         render={({ field }) => (
                             <FormItem>
-                            <FormLabel>Undergraduate or postgraduate student(u or p) (add note that “postgraduate” means that student has already completed a degree):</FormLabel>
-                            <FormControl>
-                                <Input type="text" {...field} />
-                            </FormControl>
-                            <FormMessage />
+                                <FormLabel>Undergraduate or postgraduate student(u or p) (add note that “postgraduate” means that student has already completed a degree):</FormLabel>
+                                <FormControl>
+                                    <Input type="text" {...field} />
+                                </FormControl>
+                                <FormMessage />
                             </FormItem>
                         )}
                     />
@@ -239,8 +244,8 @@ const Home = () => {
                             <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
                                 <FormControl>
                                     <Checkbox
-                                    checked={field.value}
-                                    onCheckedChange={field.onChange}
+                                        checked={field.value}
+                                        onCheckedChange={field.onChange}
                                     />
                                 </FormControl>
                                 <div className="space-y-1 leading-none">
@@ -258,31 +263,39 @@ const Home = () => {
                         control={form.control}
                         name="cv"
                         render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Please upload your CV:</FormLabel>
-                            <Label htmlFor="cv" className=" text-neutral-500"> {cv?.name}</Label>
-                            <FormControl>
-                                <Input id="cv" type="file" {...field}  onChange={(e)=>handleCvChange(e)}/>
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
+                            <FormItem>
+                                <FormLabel>Please upload your CV:</FormLabel>
+                                <Label htmlFor="cv" className=" text-neutral-500"> {cv?.name}</Label>
+                                <FormControl>
+                                    <Input id="cv" type="file" {...field} onChange={(e) => handleCvChange(e)} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
                         )}
                     />
+                    <a className='text-sm'
+                        onClick={() => {
+                            window.open(`${baseUrl}/${user?.id}/cv`)
+                        }}>My CV</a>
 
                     <FormField
                         control={form.control}
                         name="academicRecord"
                         render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Please upload your academic record:</FormLabel>
-                            <Label htmlFor="record" className=" text-neutral-500">{record?.name}</Label>
-                            <FormControl>
-                                <Input id="record"  type="file" {...field}  onChange={(e)=>handleRecordChange(e)}/>
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
+                            <FormItem>
+                                <FormLabel>Please upload your academic record:</FormLabel>
+                                <Label htmlFor="record" className=" text-neutral-500">{record?.name}</Label>
+                                <FormControl>
+                                    <Input id="record" type="file" {...field} onChange={(e) => handleRecordChange(e)} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
                         )}
                     />
+                    <a className='text-sm'
+                        onClick={() => {
+                            window.open(`${baseUrl}/${user?.id}/academic-record`)
+                        }}>My Academic Record</a>
 
                     <div className='flex justify-end'>
                         <Button type="submit">Submit</Button>
@@ -290,8 +303,8 @@ const Home = () => {
                 </form>
             </Form>
         </div>
-        
-      );
-    };
-    
-    export default Home;
+
+    );
+};
+
+export default Home;
