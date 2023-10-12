@@ -153,7 +153,7 @@ function Application(props) {
                                                         className="mb-2 mr-2"
                                                         onClick={() => {
                                                             setApplicationStatus(application.id, 'Accept')
-                                                            addUserToCousrse(application.user?.id, currentCourseId)
+                                                            addUserToCousrse(currentCourseId,application.user?.id)
                                                         }}
                                                     >Accept</Button>
                                                     <Button
