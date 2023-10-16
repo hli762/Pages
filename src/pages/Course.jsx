@@ -63,14 +63,14 @@ function Course(props) {
     }
 
     const onHourSubmit = async (data) => {
-        const { remainHours } = data;
-
-        if (!remainHours || !currentHoursId) {
-            toast.error('Please fill the form');
-            return;
-        }
+        // const { remainHours } = data;
+        
         try {
-            const { remainHours } = data;
+            if((!data.remainHours && data.remainHours !== '0') || !currentHoursId) {
+                toast.error('Please fill the form');
+                return;
+            }
+            const remainHours = data.remainHours - 0;
             await request.post(`/UpdateMarkingHours`, {
                 markingHoursId: currentHoursId,
                 remainHours,
