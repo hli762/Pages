@@ -23,7 +23,7 @@ import request from '../../lib/request';
 import { useToast } from "../../components/ui/use-toast"
 import { getSemesterId } from '../../lib/utils';
 import { useNavigate } from 'react-router-dom';
-
+import { getUser } from '../../lib/getUser'
 
 function Courses(props) {
     const semesterId = getSemesterId();
