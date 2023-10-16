@@ -22,6 +22,8 @@ import { getUser } from '../lib/getUser';
 
 function Course(props) {
     const [showAddMarker, setShowAddMarker] = useState(false);
+    const [showHours, setShowHours] = useState(false);
+    const [currentHoursId, setCurrentHourId] = useState();
     const [refreh, setRefresh] = useState(0);
     const [currentModal, setCurrentModal] = useState('marker'); // marker || supervisor
     const { id } = useParams();
@@ -40,6 +42,11 @@ function Course(props) {
         defaultValues: {},
     })
 
+    const hourForm = useForm({
+        // resolver: zodResolver(userFormSchema),
+        defaultValues: {},
+    })
+
     const onSubmit = async (data) => {
         try {
             const { email } = data;
@@ -49,6 +56,28 @@ function Course(props) {
             })
             toast.success("submit sucessfully! 🚀🚀🚀")
             setShowAddMarker(false)
+            setRefresh(refreh + 1)
+        } catch (e) {
+            toast.error(e.messege)
+        }
+    }
+
+    const onHourSubmit = async (data) => {
+        const { remainHours } = data;
+
+        if (!remainHours || !currentHoursId) {
+            toast.error('Please fill the form');
+            return;
+        }
+        try {
+            const { remainHours } = data;
+            await request.post(`/UpdateMarkingHours`, {
+                markingHoursId: currentHoursId,
+                remainHours,
+            })
+            toast.success("submit sucessfully! 🚀🚀🚀")
+            setShowHours(false)
+            setCurrentHourId();
             setRefresh(refreh + 1)
         } catch (e) {
             toast.error(e.messege)
@@ -140,11 +169,11 @@ function Course(props) {
                             <CardTitle>
                                 Markers
                                 {
-                                    userType === 'MarkerCoordinator' && 
+                                    userType === 'MarkerCoordinator' &&
                                     <Button className="ml-6" onClick={() => {
-                                    setCurrentModal('marker');
-                                    setShowAddMarker(true)
-                                }}>Add Marker</Button>}
+                                        setCurrentModal('marker');
+                                        setShowAddMarker(true)
+                                    }}>Add Marker</Button>}
                             </CardTitle>
                             <CardContent>
                                 {users?.map(user => <div key={user.id}>
@@ -169,13 +198,28 @@ function Course(props) {
                             <div>Avarage Working Hours: {course?.estimatedStudents ? (course?.totalMarkingHour / course?.estimatedStudents).toFixed(2) : '-'}</div>
                         </div>
                         <div className='grid grid-cols-1 md:grid-cols-2 lg:md:grid-cols-3 gap-4'>
-                        {hours?.map(hour => <Card className="pt-6 mb-6">
-                            <CardContent>
-                            <div className='font-bold'>name: {hour.user?.name}</div>
-                            <div>email: {hour.user?.email}</div>
-                            <div className='font-bold'>hours: {hour.remainHour}</div>
-                            </CardContent>
-                        </Card>)}
+                            {hours?.map(hour => <Card className="pt-6 mb-6">
+                                <CardContent>
+                                    <div className='font-bold'>name: {hour.user?.name}</div>
+                                    <div>email: {hour.user?.email}</div>
+                                    <div className='font-bold'>
+                                        hours: {hour.remainHour}
+                                        {
+                                            userType === 'MarkerCoordinator' &&
+                                            <Button
+                                                size="small"
+                                                className="ml-2 px-2"
+                                                onClick={() => {
+                                                    setShowHours(true);
+                                                    setCurrentHourId(hour.id)
+                                                }}
+                                            >
+                                                Update Hours
+                                            </Button>
+                                        }
+                                    </div>
+                                </CardContent>
+                            </Card>)}
                         </div>
                     </TabsContent>
                 </div>
@@ -201,6 +245,46 @@ function Course(props) {
                                             </FormLabel>
                                             <FormControl>
                                                 <Input {...field} type="email" className="mt-2" />
+                                            </FormControl>
+                                            {/* <FormDescription className='text-white'>
+                                                                    Were you a maker before
+                                                                </FormDescription> */}
+                                        </div>
+                                    </FormItem>
+                                )}
+                            />
+                            <div className='flex justify-end w-full'>
+                                <Button type="submit" variant="secondary">Submit</Button>
+                            </div>
+                        </form>
+                    </Form>
+                }
+            />
+
+            <Modal
+                isOpen={showHours}
+                title="Update Hours"
+                actionLabel='Save'
+                onClose={() => {
+                    setShowHours(false)
+                    setCurrentHourId()
+                }}
+                onSubmit={onHourSubmit}
+                body={
+                    <Form {...hourForm} >
+                        <form onSubmit={hourForm.handleSubmit(onHourSubmit)} className="space-y-8 p-4">
+                            <FormField
+                                control={hourForm.control}
+                                name="remainHours"
+                                render={({ field }) => (
+                                    <FormItem className="rounded-md border p-4">
+
+                                        <div>
+                                            <FormLabel className='text-white text-md pb-2 mb-2'>
+                                                Hours
+                                            </FormLabel>
+                                            <FormControl>
+                                                <Input {...field} type="number" className="mt-2" />
                                             </FormControl>
                                             {/* <FormDescription className='text-white'>
                                                                     Were you a maker before
