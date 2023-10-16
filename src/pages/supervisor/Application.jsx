@@ -34,7 +34,7 @@ function Application(props) {
     const { userId } = getUser();
 
 
-    const { data: courses, isLoading } = useSwr(['/GetCoursesByCourseSupervisor', userId, refresh], ([url, userId]) => userId && fetcher(`${url}/${userId}`).then(r => r.courses))
+    const { data: courses, isLoading } = useSwr(['/GetCoursesByCourseSupervisor', userId, refresh], ([url, userId]) => userId && fetcher(`${url}/${userId}`).then(r => r.courses || []))
 
     const { data: applications } = useSwr(['/GetApplicationsByCourse', currentCourseId, refresh, rank], ([url, id]) => id && fetcher(`${url}/${id}/${rank}`))
 

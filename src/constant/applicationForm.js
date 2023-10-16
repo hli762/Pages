@@ -48,7 +48,7 @@ export const applyFormSchama  = z.object({
   isRecommanded:z.boolean().default(false).optional(),
   haveDoneBefore:z.boolean().default(false).optional(),
   previousGrade:z.string(),
-  haveDoneReleventCourse:z.string()
+  haveDoneReleventCourse:z.string().optional()
 })
 
 export const courseFormSchama = z.object({

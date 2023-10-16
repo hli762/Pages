@@ -27,6 +27,7 @@ import { useNavigate } from 'react-router-dom';
 
 function Courses(props) {
     const semesterId = getSemesterId();
+    const { userId } = getUser();
     const navigate = useNavigate()
     const [refresh, setRefresh] = useState(0);
     const { data: courses, isLoading } = useSwr(['/GetCoursesBySemster', semesterId, refresh], ([url, semesterId]) => semesterId && fetcher(`${url}/${semesterId}`))
