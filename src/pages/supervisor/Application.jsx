@@ -34,7 +34,7 @@ function Application(props) {
 
     const { data: courses, isLoading } = useSwr(['/GetCoursesBySemster', semesterId, refresh], ([url, semesterId]) => semesterId && fetcher(`${url}/${semesterId}`))
 
-    const { data: applications } = useSwr(['/GetApplicationsByCourse', currentCourseId, refresh], ([url, id]) => id && fetcher(`${url}/${id}`))
+    const { data: applications } = useSwr(['/GetApplicationsByCourse', currentCourseId, refresh, rank], ([url, id]) => id && fetcher(`${url}/${id}/${rank}`))
 
     const setApplicationStatus = async (Applicationid, currentStatus) => {
         // status: in Progress || Accept || Declined
