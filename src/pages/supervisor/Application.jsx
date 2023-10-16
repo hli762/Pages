@@ -18,6 +18,7 @@ import { useNavigate } from 'react-router-dom';
 import { baseUrl } from '../../lib/fetcher';
 import request from '../../lib/request';
 import { Input, Radio } from 'antd';
+import { getUser } from '../../lib/getUser'
 
 function Application(props) {
     const semesterId = getSemesterId();
@@ -30,9 +31,10 @@ function Application(props) {
     const [searchCourse, setSearchCourse] = useState('');
     const [searchApplication, setSearchApplication] = useState('');
     const [rank, setRank] = useState('1');
+    const { userId } = getUser();
 
 
-    const { data: courses, isLoading } = useSwr(['/GetCoursesBySemster', semesterId, refresh], ([url, semesterId]) => semesterId && fetcher(`${url}/${semesterId}`))
+    const { data: courses, isLoading } = useSwr(['/GetCoursesByCourseSupervisor', userId, refresh], ([url, userId]) => userId && fetcher(`${url}/${userId}`).then(r => r.courses))
 
     const { data: applications } = useSwr(['/GetApplicationsByCourse', currentCourseId, refresh, rank], ([url, id]) => id && fetcher(`${url}/${id}/${rank}`))
 
@@ -132,7 +134,7 @@ function Application(props) {
                                     <TableRow key={application.id}>
                                         <TableCell >{application.user?.name}</TableCell>
                                         <TableCell>{application.previousGrade}%</TableCell>
-                                        <TableCell>{application.haveMarkedBefore ? <AiFillCheckCircle /> : <MdRadioButtonUnchecked /> }</TableCell>
+                                        <TableCell>{application.haveMarkedBefore ? <AiFillCheckCircle /> : <MdRadioButtonUnchecked />}</TableCell>
                                         <TableCell >{application.user?.isOverseas ? 'Yes' : 'No'}</TableCell>
                                         <TableCell >{application.user?.enrolmentDetail}</TableCell>
                                         <TableCell>{application.user?.remainHours}</TableCell>
