@@ -30,7 +30,7 @@ function Application(props) {
 
     const [searchCourse, setSearchCourse] = useState('');
     const [searchApplication, setSearchApplication] = useState('');
-    const [rank, setRank] = useState('1');
+    const [rank, setRank] = useState('4');
     const { userId } = getUser();
 
 
@@ -97,6 +97,7 @@ function Application(props) {
                         <div className='flex justify-center'>
                             <div className='mr-2'>Rank By</div>
                             <Radio.Group value={rank} onChange={e => setRank(e.target.value)}>
+                                <Radio value="4">Recommanded</Radio>
                                 <Radio value="1">Have Marked</Radio>
                                 <Radio value="2">Previous Grade</Radio>
                                 <Radio value="3">Enrolment Detail</Radio>
