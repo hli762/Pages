@@ -32,7 +32,7 @@ function Course(props) {
     const { data: assignments } = useSwr(`/GetAssignmentsByCourse/${id}`, fetcher)
     const { data: users } = useSwr([`/GetUserByCourse/${id}`, refreh], ([url]) => fetcher(url))
     const { data: courseSupervisor } = useSwr([`/GetCourseSupervisorByCourse/${id}`, refreh], ([url]) => fetcher(url))
-    const { data: hours } = useSwr(`/GetMarkingHoursByCourse/${id}`, fetcher)
+    const { data: hours } = useSwr([`/GetMarkingHoursByCourse/${id}`, refreh], ([url]) => fetcher(url))
 
     const userFormSchema = z.object({
         email: z.string()
@@ -71,13 +71,14 @@ function Course(props) {
                 return;
             }
             const remainHours = data.remainHours - 0;
-            await request.post(`/UpdateMarkingHours`, {
+            await request.post(`/UpdateMarkingHours/${currentHoursId}/${remainHours}`, {
                 markingHoursId: currentHoursId,
                 remainHours,
             })
             toast.success("submit sucessfully! 🚀🚀🚀")
             setShowHours(false)
             setCurrentHourId();
+            hourForm.reset();
             setRefresh(refreh + 1)
         } catch (e) {
             toast.error(e.messege)
