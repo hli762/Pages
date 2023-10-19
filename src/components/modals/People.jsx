@@ -17,6 +17,37 @@ import { Button } from "../../components/ui/button";
 import Modal from "../Modal";
 import { Card, CardTitle } from "../ui/card";
 
+function displayGrade(e) {
+    if(e >= 90){
+        return "A+";
+    }else if(e >= 85)
+    {
+        return "A";
+    }else if(e >= 80)
+    {
+        return "A-";
+    }else if(e >= 75)
+    {
+        return "B+";
+    }else if(e >= 70)
+    {
+        return "B";
+    }else if(e >= 65)
+    {
+        return "B-";
+    }else if(e >= 60)
+    {
+        return "C+";
+    }else if(e >= 55)
+    {
+        return "C";
+    }
+    else
+    {
+        return "C-";
+    }
+                    
+  }
 const People = ({ userId }) => {
     const [show, setShow] = useState(false);
     const [refresh, setRefresh] = useState(0);
@@ -103,7 +134,7 @@ const People = ({ userId }) => {
                                 {user?.applications?.map((application) => (
                                     <TableRow key={application.id}>
                                         <TableCell >{application.course?.courseName}</TableCell>
-                                        <TableCell>{application.previousGrade}</TableCell>
+                                        <TableCell>{displayGrade(application.previousGrade)}</TableCell>
                                         <TableCell>{application.haveMarkedBefore ? <AiFillCheckCircle /> : <MdRadioButtonUnchecked />}</TableCell>
                                         <TableCell>{application.isRecommanded ? <AiFillCheckCircle /> : <MdRadioButtonUnchecked />}</TableCell>
                                     </TableRow>
