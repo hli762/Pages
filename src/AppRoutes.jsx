@@ -12,6 +12,7 @@ import SupervisorCourse from './pages/supervisor/Course'
 import CoordinatorHome from './pages/coordinator/Home';
 import CoordinatorApplication from './pages/coordinator/Application'
 import CoordinatorCourse from './pages/coordinator/Course'
+import CoordinatorPeople from './pages/coordinator/People'
 
 const AppRoutes = [
   {
@@ -59,6 +60,10 @@ const AppRoutes = [
   {
     path: '/coordinator/course',
     element: <CoordinatorCourse/>
+  },
+  {
+    path: '/coordinator/people',
+    element: <CoordinatorPeople/>
   },
   {
     path:'/beMarker/:id',

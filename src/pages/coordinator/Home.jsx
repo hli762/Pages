@@ -107,6 +107,13 @@ function Home(props) {
                     </Button>
                 </Link>
 
+                <Link to={'/coordinator/people'}>
+                    <Button className={'w-[600px] h-[80px] flex gap-6'}>
+                        <SiMakerbot color={'white'} size={40} />
+                        PEOPLE
+                    </Button>
+                </Link>
+
                 {/* <Link to={'/coordinator/application'}>
                     <Button className={'w-[600px] h-[80px] flex gap-6'}>
                         <SiMakerbot color={'white'} size={40} />
