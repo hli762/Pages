@@ -33,7 +33,7 @@ import { Input } from 'antd';
 
 
 function getSem(year, type){
-    return String(year) + String(type);
+    return String(year) +" "+ String(type);
 }
 
 
