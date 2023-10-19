@@ -125,7 +125,7 @@ function EditCourseModal({ id, onSuccess }) {
                         name={`estimatedStudents`} // Use a unique name for each field
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel className={'text-white'}>number of markers</FormLabel>
+                                <FormLabel className={'text-white'}>number of Estimate markers</FormLabel>
                                 <FormControl>
                                     <Input value={field.value} onChange={field.onChange} />
                                 </FormControl>
@@ -138,7 +138,7 @@ function EditCourseModal({ id, onSuccess }) {
                         name={`enrolledStudents`} // Use a unique name for each field
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel className={'text-white'}>enrolledStudents</FormLabel>
+                                <FormLabel className={'text-white'}>number of Enrolled markers</FormLabel>
                                 <FormControl>
                                     <Input value={field.value} onChange={field.onChange} />
                                 </FormControl>
