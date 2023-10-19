@@ -19,7 +19,38 @@ import { baseUrl } from '../../lib/fetcher';
 import request from '../../lib/request';
 import { Input, Radio } from 'antd';
 import People from '../../components/modals/People';
-
+function displayGrade(e) {
+    if(e >= 90){
+        return "A+";
+    }else if(e >= 85)
+    {
+        return "A";
+    }else if(e >= 80)
+    {
+        return "A-";
+    }else if(e >= 75)
+    {
+        return "B+";
+    }else if(e >= 70)
+    {
+        return "B";
+    }else if(e >= 65)
+    {
+        return "B-";
+    }else if(e >= 60)
+    {
+        return "C+";
+    }else if(e >= 55)
+    {
+        return "C";
+    }
+    else
+    {
+        return "C-";
+    }
+                    
+  }
+  
 function Application(props) {
     const semesterId = getSemesterId();
     const navigate = useNavigate()
@@ -104,7 +135,7 @@ function Application(props) {
                     </div>
                     <div className={'flex w-full justify-between shadow-md p-4'}>
                         <p className={'text-lg'}>{currentCourse?.courseName} {currentCourse?.courseNumber}</p>
-                        <p className={'text-lg'}>Marked {currentCourse?.enrolledStudents}/{currentCourse?.estimatedStudents}</p>
+                        <p className={'text-lg'}>Number of Markers {currentCourse?.enrolledStudents}/{currentCourse?.estimatedStudents}</p>
                         <p className={'text-lg'}>Number of Application: {applications?.length}</p>
                     </div>
 
@@ -117,7 +148,7 @@ function Application(props) {
                                     <TableHead>Have Marked</TableHead>
                                     <TableHead>Overseas</TableHead>
                                     <TableHead>Stage</TableHead>
-                                    <TableHead>Maximum number of hours</TableHead>
+                              
                                     <TableHead>recommend</TableHead>
                                     <TableHead>documents</TableHead>
                                     <TableHead>More</TableHead>
@@ -130,11 +161,10 @@ function Application(props) {
                                         <TableCell >
                                             <Link to={`/beMarker/${application.user?.id}`} className='underline'>{application.user?.name}</Link>
                                         </TableCell>
-                                        <TableCell>{application.previousGrade}%</TableCell>
+                                        <TableCell>{displayGrade(application.previousGrade)}</TableCell>
                                         <TableCell>{application.haveMarkedBefore ? <AiFillCheckCircle /> : <MdRadioButtonUnchecked />}</TableCell>
                                         <TableCell >{application.user?.isOverseas ? 'Yes' : 'No'}</TableCell>
                                         <TableCell >{application.user?.enrolmentDetail}</TableCell>
-                                        <TableCell>{application.user?.remainHours}</TableCell>
                                         <TableCell>{application.isRecommanded ? <AiFillCheckCircle /> : <MdRadioButtonUnchecked />}</TableCell>
                                         <TableCell>
                                             <Button
