@@ -18,6 +18,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { baseUrl } from '../../lib/fetcher';
 import request from '../../lib/request';
 import { Input, Radio } from 'antd';
+import People from '../../components/modals/People';
 
 function Application(props) {
     const semesterId = getSemesterId();
@@ -119,6 +120,7 @@ function Application(props) {
                                     <TableHead>Maximum number of hours</TableHead>
                                     <TableHead>recommend</TableHead>
                                     <TableHead>documents</TableHead>
+                                    <TableHead>More</TableHead>
                                     <TableHead>Operations</TableHead>
                                 </TableRow>
                             </TableHeader>
@@ -146,6 +148,9 @@ function Application(props) {
                                                     window.open(`${baseUrl}/${application.user?.id}/academic-record`)
                                                 }}
                                             >Academic Record</Button>
+                                        </TableCell>
+                                        <TableCell>
+                                            <People userId={application.user?.id}/>
                                         </TableCell>
                                         <TableCell>
                                             {

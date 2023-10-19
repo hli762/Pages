@@ -14,6 +14,7 @@ import { AiFillCheckCircle } from 'react-icons/ai'
 import { MdRadioButtonUnchecked } from 'react-icons/md'
 import { getSemesterId } from '../../lib/utils';
 import { Button } from "../../components/ui/button";
+import PeopleComp from "../../components/modals/People";
 
 const People = () => {
     const semesterId = getSemesterId();
@@ -31,13 +32,14 @@ const People = () => {
                 <TableRow>
                     <TableHead>Name</TableHead>
                     <TableHead>Email</TableHead>
-                    <TableHead>Enrolment Detail</TableHead>
+                    {/* <TableHead>Enrolment Detail</TableHead>
                     <TableHead>Overseas</TableHead>
                     <TableHead>Citizen Or Permanent</TableHead>
                     <TableHead>Under Or Post</TableHead>
                     <TableHead>UPI</TableHead>
                     <TableHead>Description Of Contracts</TableHead>
-                    <TableHead>Have Other Contracts</TableHead>
+                    <TableHead>Have Other Contracts</TableHead> */}
+                    <TableHead>more details</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
@@ -45,13 +47,14 @@ const People = () => {
                     <TableRow key={application.id}>
                         <TableCell >{application.name}</TableCell>
                         <TableCell>{application.email}</TableCell>
-                        <TableCell>{application.enrolmentDetail}</TableCell>
+                        {/* <TableCell>{application.enrolmentDetail}</TableCell>
                         <TableCell >{application.isOverseas ? <AiFillCheckCircle /> : <MdRadioButtonUnchecked />}</TableCell>
                         <TableCell>{application.isCitizenOrPermanent ? <AiFillCheckCircle /> : <MdRadioButtonUnchecked />}</TableCell>
                         <TableCell >{application.underOrPost}</TableCell>
                         <TableCell >{application.upi}</TableCell>
                         <TableCell>{application.descriptionOfContracts}</TableCell>
-                        <TableCell>{application.haveOtherContracts ? <AiFillCheckCircle /> : <MdRadioButtonUnchecked />}</TableCell>
+                        <TableCell>{application.haveOtherContracts ? <AiFillCheckCircle /> : <MdRadioButtonUnchecked />}</TableCell> */}
+                        <TableCell><PeopleComp userId={application.id}/></TableCell>
                     </TableRow>
                 ))}
             </TableBody>
