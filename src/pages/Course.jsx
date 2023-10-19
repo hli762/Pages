@@ -30,7 +30,7 @@ function Course(props) {
     const [currentModal, setCurrentModal] = useState('marker'); // marker || supervisor
     const { id } = useParams();
     const userType = getUser()?.userType;
-    const { data: course, isLoading } = useSwr(`/GetCourseById/${id}`, fetcher)
+    const { data: course, isLoading } = useSwr([`/GetCourseById/${id}`, refreh], ([url]) => fetcher(url))
     const { data: assignments } = useSwr(`/GetAssignmentsByCourse/${id}`, fetcher)
     const { data: users } = useSwr([`/GetUserByCourse/${id}`, refreh], ([url]) => fetcher(url))
     const { data: courseSupervisor } = useSwr([`/GetCourseSupervisorByCourse/${id}`, refreh], ([url]) => fetcher(url))
@@ -120,8 +120,12 @@ function Course(props) {
     }
 
     const updateOverview = async () => {
+        if(!editingOverview) {
+            toast.error('please finish the form')
+            return;
+        }
         try {
-            await request.post(`AddOverviewToCourse`, {
+            await request.post(`AddOverviewToCourse?ovaview=${editingOverview}&courseId=${id}`, {
                 ovaview: editingOverview,
                 courseId: +id,
             })
