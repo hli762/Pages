@@ -23,6 +23,8 @@ import { getUser } from '../lib/getUser';
 function Course(props) {
     const [showAddMarker, setShowAddMarker] = useState(false);
     const [showHours, setShowHours] = useState(false);
+    const [showOverview, setShowOverview] = useState(false);
+    const [showAssignment, setShowAssignment] = useState(false);
     const [currentHoursId, setCurrentHourId] = useState();
     const [refreh, setRefresh] = useState(0);
     const [currentModal, setCurrentModal] = useState('marker'); // marker || supervisor
@@ -33,6 +35,12 @@ function Course(props) {
     const { data: users } = useSwr([`/GetUserByCourse/${id}`, refreh], ([url]) => fetcher(url))
     const { data: courseSupervisor } = useSwr([`/GetCourseSupervisorByCourse/${id}`, refreh], ([url]) => fetcher(url))
     const { data: hours } = useSwr([`/GetMarkingHoursByCourse/${id}`, refreh], ([url]) => fetcher(url))
+
+    const [editingOverview, setEditingOverview] = useState('');
+
+    const [editingAssignmentType, setEditingAssignmentType] = useState('');
+    const [editingAssignmentDesc, setEditingAssignmentDesc] = useState('');
+
 
     const userFormSchema = z.object({
         email: z.string()
@@ -64,9 +72,9 @@ function Course(props) {
 
     const onHourSubmit = async (data) => {
         // const { remainHours } = data;
-        
+
         try {
-            if((!data.remainHours && data.remainHours !== '0') || !currentHoursId) {
+            if ((!data.remainHours && data.remainHours !== '0') || !currentHoursId) {
                 toast.error('Please fill the form');
                 return;
             }
@@ -111,6 +119,39 @@ function Course(props) {
         }
     }
 
+    const updateOverview = async () => {
+        try {
+            await request.post(`AddOverviewToCourse`, {
+                ovaview: editingOverview,
+                courseId: +id,
+            })
+            toast.success("submit sucessfully! 🚀🚀🚀")
+            setShowOverview(false);
+            setRefresh(refreh + 1)
+        } catch (e) {
+            toast.error(e.messege)
+        }
+    }
+
+    const addAsssignment = async () => {
+        if (!editingAssignmentType || !editingAssignmentDesc) {
+            toast.error('please finish the form');
+            return;
+        }
+        try {
+            await request.post(`NewAssignment`, {
+                assignmentType: editingAssignmentType,
+                description: editingAssignmentDesc,
+                courseID: +id,
+            })
+            toast.success("submit sucessfully! 🚀🚀🚀")
+            setShowAssignment(false);
+            setRefresh(refreh + 1)
+        } catch (e) {
+            toast.error(e.messege)
+        }
+    }
+
     return (
         <div className='w-full'>
             <Tabs defaultValue="Overview" className="flex w-full mt-[80px]">
@@ -126,6 +167,16 @@ function Course(props) {
                 <div className='basis-5/6'>
                     <TabsContent value="Assignment">
                         {
+                            userType === 'CourseSupervisor' &&
+                            <Button
+                                className="my-2"
+                                onClick={() => {
+                                    setShowAssignment(true)
+                                    setEditingAssignmentDesc('')
+                                    setEditingAssignmentType('')
+                                }}>Add Assignment</Button>
+                        }
+                        {
                             assignments?.map(assignment => <div key={assignment.id}>
                                 <Card className="p-2 mb-2">
                                     <CardTitle>{assignment.assignmentType}</CardTitle>
@@ -136,7 +187,20 @@ function Course(props) {
                     </TabsContent>
                     <TabsContent value="Overview">
                         <div className='font-bold'>{course?.courseName} {course?.courseNumber}</div>
-                        {course?.overview}
+                        {
+                            userType === 'CourseSupervisor' &&
+                            <Button
+                                size="small"
+                                className="px-2"
+                                onClick={() => {
+                                    setShowOverview(true);
+                                    setEditingOverview(course?.overview || '')
+                                }}
+                            >Edit Overview</Button>
+                        }
+                        <div>
+                            {course?.overview}
+                        </div>
                     </TabsContent>
                     <TabsContent value="People">
                         <Card className="p-2 mb-6">
@@ -299,6 +363,35 @@ function Course(props) {
                             </div>
                         </form>
                     </Form>
+                }
+            />
+
+            <Modal
+                isOpen={showOverview}
+                title="Overview"
+                actionLabel='Save'
+                onClose={() => setShowOverview(false)}
+                // onSubmit={onSubmit}
+                body={
+                    <div className='text-center'>
+                        <Input value={editingOverview} onChange={e => setEditingOverview(e.target.value)} />
+                        <Button className="mt-4" onClick={() => updateOverview()}>Submit</Button>
+                    </div>
+                }
+            />
+
+            <Modal
+                isOpen={showAssignment}
+                title="Add Assignment"
+                actionLabel='Save'
+                onClose={() => setShowAssignment(false)}
+                // onSubmit={onSubmit}
+                body={
+                    <div className='text-center'>
+                        <Input placeholder="input assignment type" value={editingAssignmentType} onChange={e => setEditingAssignmentType(e.target.value)} />
+                        <Input placeholder="input assignment description" className="mt-4" value={editingAssignmentDesc} onChange={e => setEditingAssignmentDesc(e.target.value)} />
+                        <Button className="mt-4" onClick={() => addAsssignment()}>Submit</Button>
+                    </div>
                 }
             />
         </div>
