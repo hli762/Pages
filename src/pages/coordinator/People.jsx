@@ -1,6 +1,6 @@
 import React from "react";
 import useSwr from "swr";
-import fetcher from '../../lib/fetcher';
+import fetcher, {baseUrl} from '../../lib/fetcher';
 import {
     Table,
     TableBody,
@@ -13,12 +13,19 @@ import {
 import { AiFillCheckCircle } from 'react-icons/ai'
 import { MdRadioButtonUnchecked } from 'react-icons/md'
 import { getSemesterId } from '../../lib/utils';
+import { Button } from "../../components/ui/button";
 
 const People = () => {
     const semesterId = getSemesterId();
     const { data: applications, isLoading } = useSwr(['/GetAllUsers', semesterId], ([url, semesterId]) => semesterId && fetcher(`${url}`))
 
     return <div className="p-8">
+        <Button
+            className="mb-2"
+            onClick={() => {
+                window.open(`${baseUrl}/download`)
+            }}
+        >download all user to excel</Button>
         <Table>
             <TableHeader>
                 <TableRow>
