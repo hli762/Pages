@@ -26,7 +26,7 @@ const People = () => {
             onClick={() => {
                 window.open(`${baseUrl}/download`)
             }}
-        >download all user to excel</Button>
+        >download all users and applications to excel</Button>
         <Table>
             <TableHeader>
                 <TableRow>
