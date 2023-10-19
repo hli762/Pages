@@ -102,6 +102,8 @@ const People = ({ userId }) => {
                                     <TableHead>UPI</TableHead>
                                     <TableHead>Description Of Contracts</TableHead>
                                     <TableHead>Have Other Contracts</TableHead>
+                                    <TableHead>CV</TableHead>
+                                    <TableHead>Academic Records</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -116,6 +118,21 @@ const People = ({ userId }) => {
                                     <TableCell >{user.upi}</TableCell>
                                     <TableCell>{user.descriptionOfContracts}</TableCell>
                                     <TableCell>{user.haveOtherContracts ? <AiFillCheckCircle /> : <MdRadioButtonUnchecked />}</TableCell>
+                                    <TableCell>
+                                            <Button
+                                                className="mb-2 mr-2"
+                                                onClick={() => {
+                                                    window.open(`${baseUrl}/${user.id}/cv`)
+                                                }}
+                                            >CV</Button>
+                                            
+                                        </TableCell>
+
+                                    <TableCell><Button
+                                                onClick={() => {
+                                                    window.open(`${baseUrl}/${user.id}/academic-record`)
+                                                }}
+                                            >Academic Record</Button></TableCell>
                                 </TableRow>
                                 {/* ))} */}
                             </TableBody>
