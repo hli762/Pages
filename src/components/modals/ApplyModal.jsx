@@ -140,7 +140,7 @@ function ApplyModal({ courseId, onApply }) {
                         name="previousGrade"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel className='text-white text-md'>Could you provide previous grade in percentage (%)?</FormLabel>
+                                <FormLabel className='text-white text-md'>Could you provide previous grade in percentage(%)? i.e. above 90% is A+, above 70% is B</FormLabel>
                                 <FormControl>
                                     <Input type="number" {...field} />
                                 </FormControl>
