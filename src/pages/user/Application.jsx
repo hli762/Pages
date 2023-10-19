@@ -32,6 +32,11 @@ import { Input } from 'antd';
 
 
 
+function getSem(year, type){
+    return String(year) + String(type);
+}
+
+
 
 
 function Application(props) {
@@ -118,6 +123,7 @@ function Application(props) {
                         <TableHeader>
                             <TableRow>
                                 <TableHead>Course Name</TableHead>
+                                <TableHead>Semester</TableHead>
                                 <TableHead>Course Marker</TableHead>
                                 <TableHead>Course Information</TableHead>
                                 <TableHead>Apply Now</TableHead>
@@ -127,6 +133,7 @@ function Application(props) {
                             {courses?.filter(course => `${course.courseName} ${course.courseNumber}`.includes(searchCourse))?.map((course) => (
                                 <TableRow key={course.id}>
                                     <TableCell >{course.courseName} {course.courseNumber}</TableCell>
+                                    <TableCell>{getSem(course.semester.year, course.semester.semesterType)}</TableCell>
                                     <TableCell>{course.enrolledStudents}/{course.estimatedStudents}</TableCell>
                                     <TableCell>
                                         {
