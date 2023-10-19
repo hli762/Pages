@@ -17,6 +17,9 @@ import { Button } from "../../components/ui/button";
 import Modal from "../Modal";
 import { Card, CardTitle } from "../ui/card";
 
+  function numberNname(n, num){
+    return n + String(num);
+}
 function displayGrade(e) {
     if(e >= 90){
         return "A+";
@@ -133,7 +136,7 @@ const People = ({ userId }) => {
                             <TableBody>
                                 {user?.applications?.map((application) => (
                                     <TableRow key={application.id}>
-                                        <TableCell >{application.course?.courseName}</TableCell>
+                                        <TableCell >{numberNname(application.course?.courseName, application.course?.courseNumber)}</TableCell>
                                         <TableCell>{displayGrade(application.previousGrade)}</TableCell>
                                         <TableCell>{application.haveMarkedBefore ? <AiFillCheckCircle /> : <MdRadioButtonUnchecked />}</TableCell>
                                         <TableCell>{application.isRecommanded ? <AiFillCheckCircle /> : <MdRadioButtonUnchecked />}</TableCell>
