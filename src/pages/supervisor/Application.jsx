@@ -21,6 +21,38 @@ import { Input, Radio } from 'antd';
 import { getUser } from '../../lib/getUser'
 import People from '../../components/modals/People';
 
+function displayGrade(e) {
+    if(e >= 90){
+        return "A+";
+    }else if(e >= 85)
+    {
+        return "A";
+    }else if(e >= 80)
+    {
+        return "A-";
+    }else if(e >= 75)
+    {
+        return "B+";
+    }else if(e >= 70)
+    {
+        return "B";
+    }else if(e >= 65)
+    {
+        return "B-";
+    }else if(e >= 60)
+    {
+        return "C+";
+    }else if(e >= 55)
+    {
+        return "C";
+    }
+    else
+    {
+        return "C-";
+    }
+                    
+  }
+
 function Application(props) {
     const semesterId = getSemesterId();
     const navigate = useNavigate()
@@ -125,7 +157,7 @@ function Application(props) {
                                     <TableHead>Have Marked</TableHead>
                                     <TableHead>Overseas</TableHead>
                                     <TableHead>Stage</TableHead>
-                                    <TableHead>Maximum number of hours</TableHead>
+                            
                                     <TableHead>recommend</TableHead>
                                     <TableHead>documents</TableHead>
                                     <TableHead>More</TableHead>
@@ -136,11 +168,11 @@ function Application(props) {
                                 {applications?.filter(application => `${application?.user?.name}`.toLowerCase()?.includes(searchApplication.toLowerCase()))?.map((application) => (
                                     <TableRow key={application.id}>
                                         <TableCell >{application.user?.name}</TableCell>
-                                        <TableCell>{application.previousGrade}%</TableCell>
+                                        <TableCell>{displayGrade(application.previousGrade)}</TableCell>
                                         <TableCell>{application.haveMarkedBefore ? <AiFillCheckCircle /> : <MdRadioButtonUnchecked />}</TableCell>
                                         <TableCell >{application.user?.isOverseas ? 'Yes' : 'No'}</TableCell>
                                         <TableCell >{application.user?.enrolmentDetail}</TableCell>
-                                        <TableCell>{application.user?.remainHours}</TableCell>
+                         
                                         <TableCell>{application.isRecommanded ? <AiFillCheckCircle /> : <MdRadioButtonUnchecked />}</TableCell>
                                         <TableCell>
                                             <Button
