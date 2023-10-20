@@ -14,13 +14,11 @@ import useSwr from "swr";
 import fetcher from '../../lib/fetcher';
 import { Button } from '../../components/ui/button';
 import { getSemesterId } from '../../lib/utils';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { baseUrl } from '../../lib/fetcher';
 import request from '../../lib/request';
 import { Input, Radio } from 'antd';
-import { getUser } from '../../lib/getUser'
 import People from '../../components/modals/People';
-
 function displayGrade(e) {
     if(e >= 90){
         return "A+";
@@ -52,7 +50,7 @@ function displayGrade(e) {
     }
                     
   }
-
+  
 function Application(props) {
     const semesterId = getSemesterId();
     const navigate = useNavigate()
@@ -64,12 +62,10 @@ function Application(props) {
     const [searchCourse, setSearchCourse] = useState('');
     const [searchApplication, setSearchApplication] = useState('');
     const [rank, setRank] = useState('4');
-    const { userId } = getUser();
 
+    const { data: courses, isLoading } = useSwr(['/GetCoursesBySemster', semesterId, refresh], ([url, semesterId]) => semesterId && fetcher(`${url}/${semesterId}`))
 
-    const { data: courses, isLoading } = useSwr(['/GetCoursesByCourseSupervisor', userId, semesterId, refresh], ([url, userId]) => userId && fetcher(`${url}/${userId}/${semesterId}`).then(r => r.courses || []))
-
-    const { data: applications } = useSwr(['/GetApplicationsByCourse', currentCourseId, refresh, rank], ([url, id]) => id && fetcher(`${url}/${id}/${rank}`))
+    const { data: applications } = useSwr(['/GetApplicationsByCourse', currentCourseId, rank, refresh], ([url, id]) => id && fetcher(`${url}/${id}/${rank}`))
 
     const setApplicationStatus = async (Applicationid, currentStatus) => {
         // status: in Progress || Accept || Declined
@@ -77,15 +73,10 @@ function Application(props) {
         setRefresh(refresh + 1)
     }
 
-    const setRecommend = async (Applicationid, isRecommanded) => {
-        // status: in Progress || Accept || Declined
-        await request.post(`/SetIsRecommandedOfApplication`, {
-            Applicationid,
-            isRecommanded,
-        });
+    const addUserToCousrse = async (userId, courseId) => {
+        await request.post(`/AddUserToCourse/${userId}/${courseId}`);
         setRefresh(refresh + 1)
     }
-
     useEffect(() => {
         setCurrentCourseId(courses?.[0]?.id)
         setCurrentCourse(courses?.[0])
@@ -144,7 +135,7 @@ function Application(props) {
                     </div>
                     <div className={'flex w-full justify-between shadow-md p-4'}>
                         <p className={'text-lg'}>{currentCourse?.courseName} {currentCourse?.courseNumber}</p>
-                        <p className={'text-lg'}>Markers {currentCourse?.enrolledStudents}/{currentCourse?.estimatedStudents}</p>
+                        <p className={'text-lg'}>Number of Markers {currentCourse?.enrolledStudents}/{currentCourse?.estimatedStudents}</p>
                         <p className={'text-lg'}>Number of Application: {applications?.length}</p>
                     </div>
 
@@ -157,7 +148,7 @@ function Application(props) {
                                     <TableHead>Have Marked</TableHead>
                                     <TableHead>Overseas</TableHead>
                                     <TableHead>Stage</TableHead>
-                            
+                              
                                     <TableHead>recommend</TableHead>
                                     <TableHead>documents</TableHead>
                                     <TableHead>More</TableHead>
@@ -167,12 +158,13 @@ function Application(props) {
                             <TableBody>
                                 {applications?.filter(application => `${application?.user?.name}`.toLowerCase()?.includes(searchApplication.toLowerCase()))?.map((application) => (
                                     <TableRow key={application.id}>
-                                        <TableCell >{application.user?.name}</TableCell>
+                                        <TableCell >
+                                            <Link to={`/beMarker/${application.user?.id}`} className='underline'>{application.user?.name}</Link>
+                                        </TableCell>
                                         <TableCell>{displayGrade(application.previousGrade)}</TableCell>
                                         <TableCell>{application.haveMarkedBefore ? <AiFillCheckCircle /> : <MdRadioButtonUnchecked />}</TableCell>
                                         <TableCell >{application.user?.isOverseas ? 'Yes' : 'No'}</TableCell>
                                         <TableCell >{application.user?.enrolmentDetail}</TableCell>
-                         
                                         <TableCell>{application.isRecommanded ? <AiFillCheckCircle /> : <MdRadioButtonUnchecked />}</TableCell>
                                         <TableCell>
                                             <Button
@@ -196,9 +188,10 @@ function Application(props) {
                                                     <Button
                                                         className="mb-2 mr-2"
                                                         onClick={() => {
-                                                            setRecommend(application.id, !application.isRecommanded)
+                                                            setApplicationStatus(application.id, 'Accept')
+                                                            addUserToCousrse(currentCourseId,application.user?.id)
                                                         }}
-                                                    >{application.isRecommanded ? 'Not Recommend' : 'Recommend'}</Button>
+                                                    >Accept</Button>
                                                     <Button
                                                         onClick={() => {
                                                             setApplicationStatus(application.id, 'Declined')
