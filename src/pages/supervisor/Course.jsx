@@ -68,7 +68,9 @@ function Courses(props) {
         <div className='p-6'>
             <EditCourseModal id={editId} onSuccess={onSuccess}/>
             <CreateCourseModal />
-            
+            <Button className="mt-6" onClick={() => { createCourseModal.onOpen() }}>
+                Add Course
+            </Button>
             <Table className="mt-6">
                 <TableHeader>
                     <TableRow>
