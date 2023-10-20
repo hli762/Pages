@@ -171,7 +171,7 @@ function Course(props) {
                 <div className='basis-5/6'>
                     <TabsContent value="Assignment">
                         {
-                            userType === 'CourseSupervisor' &&
+                            (userType === 'CourseSupervisor' || userType === 'MarkerCoordinator') &&
                             <Button
                                 className="my-2"
                                 onClick={() => {
@@ -192,7 +192,7 @@ function Course(props) {
                     <TabsContent value="Overview">
                         <div className='font-bold'>{course?.courseName} {course?.courseNumber}</div>
                         {
-                            userType === 'CourseSupervisor' &&
+                            (userType === 'CourseSupervisor' || userType === 'MarkerCoordinator') &&
                             <Button
                                 size="small"
                                 className="px-2"
@@ -274,7 +274,7 @@ function Course(props) {
                                     <div className='font-bold'>
                                         hours: {hour.remainHour}
                                         {
-                                            userType === 'MarkerCoordinator' &&
+                                            (userType === 'CourseSupervisor' || userType === 'MarkerCoordinator') &&
                                             <Button
                                                 size="small"
                                                 className="ml-2 px-2"
