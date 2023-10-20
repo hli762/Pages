@@ -30,7 +30,7 @@ function Courses(props) {
     const { userId } = getUser();
     const navigate = useNavigate()
     const [refresh, setRefresh] = useState(0);
-    const { data: courses, isLoading } = useSwr(['/GetCoursesBySemster', semesterId, refresh], ([url, semesterId]) => semesterId && fetcher(`${url}/${semesterId}`))
+    const { data: courses, isLoading } = useSwr(['/GetCoursesByCourseSupervisor', userId, semesterId, refresh], ([url, userId]) => userId && fetcher(`${url}/${userId}/${semesterId}`).then(r => r.courses || []));
     const [editId, setEditId] = useState()
     const [toDeleteId, setToDeleteId] = useState();
     const [showDeleteTips, setShowDeleteTips] = useState(false);
