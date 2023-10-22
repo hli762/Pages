@@ -41,12 +41,11 @@ function Courses(props) {
 
 
     const onDelete = async () => {
-        await request.post('deleteCourseById', {
-            id: toDeleteId
-        })
-        toast.success("delete sucessfully! 🚀🚀🚀")
-        setShowDeleteTips(false);
+    await request.post(`deleteCourseById/${toDeleteId}`)
+    toast.success("Delete successfully! 🚀🚀🚀")
+    setShowDeleteTips(false);
     }
+
 
     const onSuccess = () => {
         setRefresh(refresh + 1);
