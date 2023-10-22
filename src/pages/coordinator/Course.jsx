@@ -41,7 +41,7 @@ function Courses(props) {
 
 
     const onDelete = async () => {
-    await request.post(`deleteCourseById/${toDeleteId}`)
+    await request.post(` deleteCourseById/${toDeleteId}`)
     toast.success("Delete successfully! 🚀🚀🚀")
     setShowDeleteTips(false);
     }
